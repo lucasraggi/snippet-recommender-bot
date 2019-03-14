@@ -26,25 +26,43 @@ def get_removable_indexes_variances(removable_indexes):
     removable_indexes_list = []  # list of list of removable indexes
     size = len(removable_indexes)
     variances_number = 5
+    number_lines = int(size / variances_number)
     for i in range(1, variances_number):
-        temp = size/variances_number
-        removable_indexes_list.append(removable_indexes[:(temp*i)/size])
+        slicing = number_lines*i
+        removable_indexes_list.append(removable_indexes[slicing:])
     return removable_indexes_list
 
 
-def generate_incomplete_methods(method_lines, removable_indexes):
-    removable_indexes_list = get_removable_indexes_variances(removable_indexes)
+def add_method_by_method_lines(methods, index, method_lines):
+    method = ''
+    for i in method_lines:
+        method += i + '\n'
+    methods.append[index, 'codes'] = method
 
-    pass
+
+def generate_incomplete_method(methods, method_lines, removable_indexes):
+    print(removable_indexes)
+    new_method_lines = []
+    method_lines_size = len(method_lines)
+    for i in range(method_lines_size):
+        if i not in removable_indexes:
+            new_method_lines.append(method_lines[i])
 
 
 def main():
-    methods = pd.read_csv('result.csv')
+    df = pd.read_csv('result.csv')
+    methods = df.head(5)
     for index, row in methods.iterrows():
         method = row['codes']
         method_lines = pre_process_method(method)
         removable_indexes = get_removable_line_indexes(method_lines)
-        generate_incomplete_methods(method_lines, removable_indexes)
+        removable_indexes_list = get_removable_indexes_variances(removable_indexes)
+        add_method_by_method_lines(methods, index, method_lines)
+        methods.drop(index)
+        for i in removable_indexes_list:
+            generate_incomplete_method(methods, method_lines, i)
+        break
+    methods.to_csv('results_test.csv', index=False)
 
 
 main()
