@@ -6,7 +6,7 @@ class MySqlOperator:
             host = '127.0.0.1',
             user = 'root',
             database = 'java_methods',
-            passwd = 'ARTHURESAX9512357'
+            passwd = ''
         )
         self.mycursor = self.mydb.cursor()
 
