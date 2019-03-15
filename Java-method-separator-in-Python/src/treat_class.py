@@ -13,7 +13,7 @@ class TreatClass:
 
     def is_class_type(self, tokens):
         string = ' '.join(map(str, tokens))
-        if  re.search('(public|private|protected).+{', string):
+        if re.search('(public|private|protected).+{', string):
             return True
         return False
 

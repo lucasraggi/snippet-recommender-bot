@@ -2,20 +2,25 @@ import mysql.connector
 
 class MySqlOperator:
     def __init__(self):
-        self.mydb = mysql.connector.connect(
-            host = '127.0.0.1',
-            user = 'root',
-            database = 'java_methods',
-            passwd = ''
-        )
-        self.mycursor = self.mydb.cursor()
+        try:
+            self.mydb = mysql.connector.connect(
+                host = '127.0.0.1',
+                user = 'root',
+                database = 'java',
+                passwd = ''
+            )
+            self.mycursor = self.mydb.cursor()
+        except mysql.connector.Error as err:
+            print("ERROR to connect in database {}".format(err))
 
     def insert_table(self, codes):
         try:
             for i in codes:
                 method_name = str(i.name)
                 method_codes = '\n'.join(map(str, i.code_lines))
-                self.mycursor.execute('insert into methods(name, codes) values(%s, %s)', (method_name, method_codes))
+                class_name = str(i.class_name)
+                self.mycursor.execute('insert into methods(name, class, codes) values(%s, %s, %s)',
+                                      (method_name, class_name, method_codes))
         except mysql.connector.Error as err:
             print("ERROR in insert table {}".format(err))
 
@@ -24,7 +29,7 @@ class MySqlOperator:
             self.mycursor.execute('select codes from methods where name = %s', (method_name,))
             return self.mycursor.fetchall()
         except mysql.connector.Error as err:
-            print("ERROR in select tablem from table {}".format(err))
+            print("ERROR in select table from table {}".format(err))
 
     def commit_table(self):
         try:

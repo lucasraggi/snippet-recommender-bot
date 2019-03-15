@@ -1,7 +1,7 @@
 from nltk.tokenize import word_tokenize
-from src.java_method import Method
-from src.treat_methods import TreatMethods
-from src.treat_class import TreatClass
+from java_method import Method
+from treat_methods import TreatMethods
+from treat_class import TreatClass
 
 class Split:
     def __init__(self):
@@ -30,7 +30,7 @@ class Split:
         tokens = word_tokenize(self.line)
         self.split_class(tokens)
 
-        if self.class_name != None:
+        if self.class_name is not None:
             self.split_methods(tokens)
 
     def split_class(self, tokens):
@@ -45,18 +45,17 @@ class Split:
                 self.code_lines.append(self.line)
                 self.stack.append('{')
                 break
-
-            if len(self.stack) > 0 and len(self.code_lines):
+            if len(self.stack) > 0:
                 if i is len(tokens) - 1:
                     self.code_lines.append(self.line)
-
                 if tokens[i] is '{':
                     self.stack.append('{')
                 elif tokens[i] is '}':
                     self.stack.pop()
                     if len(self.stack) == 0:
-                        new_method = Method(self.method_name, self.code_lines.copy(), self.class_name)
-                        self.all_methods.append(new_method)
-                        self.code_lines.clear()
+                        self.create_new_method_object_and_clear_list()
 
-
+    def create_new_method_object_and_clear_list(self):
+        new_method = Method(self.method_name, self.code_lines.copy(), self.class_name)
+        self.all_methods.append(new_method)
+        self.code_lines.append(new_method)

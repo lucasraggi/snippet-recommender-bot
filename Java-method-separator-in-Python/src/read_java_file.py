@@ -1,7 +1,8 @@
 import os
 import re
-from src.file_split_management import Split
-from src.mysql_connector import MySqlOperator
+from file_split_management import Split
+from mysql_connector import MySqlOperator
+
 
 class TreatDirectory:
     def __init__(self, directory):
@@ -16,21 +17,18 @@ class TreatDirectory:
         mysql_operator = MySqlOperator()
         receive_objects = list()
 
-        try:
-            for file in os.listdir(directory):
-                if os.path.isfile(directory + '/' + file):
-                    if self.is_java_file(file):
-                        receive_objects = split.work_in_file(directory + '/' + file)
-                        mysql_operator.insert_table(receive_objects)
-                        receive_objects.clear()
-                else:
-                    self.split_java_files_and_add_to_sql(directory + '/' + file)
-            mysql_operator.commit_table()
-        except:
-            print("ERROR in directory " + directory)
+        for file in os.listdir(directory):
+            if os.path.isfile(directory + '/' + file):
+                if self.is_java_file(file):
+                    receive_objects = split.work_in_file(directory + '/' + file)
+                    mysql_operator.insert_table(receive_objects)
+                    receive_objects.clear()
+            else:
+                self.split_java_files_and_add_to_sql(directory + '/' + file)
+        mysql_operator.commit_table()
 
     def is_java_file(self, file_name):
-        if re.search("\w.+.java", file_name):
+        if re.search(".+.java", file_name):
             return True
         return False
 
