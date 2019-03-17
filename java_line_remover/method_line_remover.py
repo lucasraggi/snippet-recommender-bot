@@ -48,7 +48,6 @@ def add_method_by_method_lines(methods, current_method, method_lines):
 
 
 def generate_incomplete_method(methods, current_method, method_lines, removable_indexes):
-    print(removable_indexes)
     new_method_lines = []
     method_lines_size = len(method_lines)
     for i in range(method_lines_size):
@@ -60,7 +59,7 @@ def generate_incomplete_method(methods, current_method, method_lines, removable_
 
 def main():
     df = pd.read_csv('result.csv')
-    methods = df.head(5)
+    methods = df
     methods = methods.drop('id', axis=1)
     for index, row in methods.iterrows():
         method = row['codes']
@@ -70,8 +69,11 @@ def main():
         current_method = methods.loc[index]
         methods = methods.drop(index)
         methods = add_method_by_method_lines(methods, current_method, method_lines)
+        print_method_lines(method_lines)
         for i in removable_indexes_list:
             methods = generate_incomplete_method(methods, current_method, method_lines, i)
+    methods = methods.reset_index()
+    methods = methods.drop('index', axis=1)
     methods.to_csv('results_test.csv')
 
 
