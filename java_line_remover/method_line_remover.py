@@ -28,6 +28,13 @@ def get_removable_line_indexes(method_lines):
     return removable_indexes
 
 
+def print_removable_blocks(removable_line_blocks):
+    print('[', end='')
+    for i in removable_line_blocks:
+        print('[', i[0], '-', i[-1], ']', end='')
+    print(']')
+
+
 def get_removable_line_blocks_indexes(method_lines):
     if_begin_regex = pcre.compile(r"if\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
     for_begin_regex = pcre.compile(r"for\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
@@ -41,15 +48,24 @@ def get_removable_line_blocks_indexes(method_lines):
         # checks if the line has a for or if
         if for_begin_regex.search(method[i]) is not None or if_begin_regex.search(method[i]) is not None:
             balancing_stack = ['{']
-            removable_line_block = [i]
-            for j in range(i, size):
+            removable_line_block = []
+            # print('CURRENT METHOD: ', method[i])
+            for j in range(i + 1, size):
                 removable_line_block.append(j)
+                if len(balancing_stack) == 0:
+                    break
                 for k in method[j]:
                     if k == '{':
+                        # print('     before push: ', balancing_stack)
                         balancing_stack.append('{')
-                    if k == '}':
+                        # print('     after push: ', balancing_stack)
+                    if k == '}' and len(balancing_stack) > 0:
+                        # print('     before pop: ', balancing_stack)
                         balancing_stack.pop()
+                        # print('     after pop: ', balancing_stack)
             removable_line_blocks.append(removable_line_block)
+    # print(removable_line_blocks)
+    print_removable_blocks(removable_line_blocks)
 
 
 def get_removable_indexes_variances(removable_indexes):
