@@ -35,12 +35,8 @@ def get_removable_indexes_variances(removable_indexes):
     for i in range(1, variances_number):
         slicing = number_lines * i
         removable_indexes_list.append(removable_indexes[slicing:])
-    print(removable_indexes_list)
-    for i in range(0, len(removable_indexes_list) - 1):
-        if removable_indexes_list[i] == removable_indexes_list[i + 1]:
-            del removable_indexes_list[i]
-    print(removable_indexes_list)
-    print("#############################################")
+    removable_indexes_list = set(map(tuple, removable_indexes_list))  # removing duplicates from list
+    removable_indexes_list = list(map(list, removable_indexes_list))
 
     return removable_indexes_list
 
@@ -66,7 +62,7 @@ def generate_incomplete_method(methods, current_method, method_lines, removable_
 
 def main():
     df = pd.read_csv('result.csv')
-    methods = df
+    methods = df.head(5)
     methods = methods.drop('id', axis=1)
     for index, row in methods.iterrows():
         method = row['codes']
@@ -76,7 +72,6 @@ def main():
         current_method = methods.loc[index]
         methods = methods.drop(index)
         methods = add_method_by_method_lines(methods, current_method, method_lines)
-        print_method_lines(method_lines)
         for i in removable_indexes_list:
             methods = generate_incomplete_method(methods, current_method, method_lines, i)
     methods = methods.reset_index()
