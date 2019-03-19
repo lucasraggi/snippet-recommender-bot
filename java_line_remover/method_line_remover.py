@@ -44,10 +44,11 @@ def get_removable_line_blocks_indexes(method_lines):
             removable_line_block = [i]
             for j in range(i, size):
                 removable_line_block.append(j)
-                if open_brackets_regex.search(method[j]):
-                    balancing_stack.append('{')
-                if closed_brackets_regex.search(method[j]):
-                    balancing_stack.pop()
+                for k in method[j]:
+                    if k == '{':
+                        balancing_stack.append('{')
+                    if k == '}':
+                        balancing_stack.pop()
             removable_line_blocks.append(removable_line_block)
 
 
