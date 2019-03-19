@@ -31,14 +31,24 @@ def get_removable_line_indexes(method_lines):
 def get_removable_line_blocks_indexes(method_lines):
     if_begin_regex = pcre.compile(r"if\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
     for_begin_regex = pcre.compile(r"for\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
+    open_brackets_regex = pcre.compile(r'[{]')
+    closed_brackets_regex = pcre.compile(r'[}]')
     with open("in", "r") as file:
         method = file.readlines()
     size = len(method)
+    removable_line_blocks = []
     for i in range(size):
         # checks if the line has a for or if
         if for_begin_regex.search(method[i]) is not None or if_begin_regex.search(method[i]) is not None:
-            pass
-
+            balancing_stack = ['{']
+            removable_line_block = [i]
+            for j in range(i, size):
+                removable_line_block.append(j)
+                if open_brackets_regex.search(method[j]):
+                    balancing_stack.append('{')
+                if closed_brackets_regex.search(method[j]):
+                    balancing_stack.pop()
+            removable_line_blocks.append(removable_line_block)
 
 
 def get_removable_indexes_variances(removable_indexes):
