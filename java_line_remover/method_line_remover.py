@@ -25,11 +25,18 @@ def get_removable_line_indexes(method_lines):
 def get_removable_indexes_variances(removable_indexes):
     removable_indexes_list = []  # list of list of removable indexes
     size = len(removable_indexes)
-    variances_number = 5
+    variances_number = 5  # number of removable indexes generated
     number_lines = int(size / variances_number)
     for i in range(1, variances_number):
         slicing = number_lines*i
         removable_indexes_list.append(removable_indexes[slicing:])
+    print(removable_indexes_list)
+    for i in range(0, len(removable_indexes_list) - 1):
+        if removable_indexes_list[i] == removable_indexes_list[i + 1]:
+            del removable_indexes_list[i]
+    print(removable_indexes_list)
+    print("#############################################")
+
     return removable_indexes_list
 
 
