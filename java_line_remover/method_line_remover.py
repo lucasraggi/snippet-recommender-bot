@@ -36,10 +36,10 @@ def print_removable_blocks(removable_line_blocks):
 
 
 def get_removable_line_blocks_indexes(method_lines):
-    if_begin_regex = pcre.compile(r"if\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
-    for_begin_regex = pcre.compile(r"for\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
-    open_brackets_regex = pcre.compile(r'[{]')
-    closed_brackets_regex = pcre.compile(r'[}]')
+    if_begin_regex = pcre.compile(
+        r"if\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
+    for_begin_regex = pcre.compile(
+        r"for\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
     with open("in", "r") as file:
         method = file.readlines()
     size = len(method)
@@ -47,22 +47,27 @@ def get_removable_line_blocks_indexes(method_lines):
     for i in range(size):
         # checks if the line has a for or if
         if for_begin_regex.search(method[i]) is not None or if_begin_regex.search(method[i]) is not None:
-            balancing_stack = ['{']
+            balancing_stack = []
+            if method[i][-2] == '{':
+                balancing_stack.append('{')
             removable_line_block = []
+            can_end = False
             # print('CURRENT METHOD: ', method[i])
             for j in range(i + 1, size):
                 removable_line_block.append(j)
-                if len(balancing_stack) == 0:
+                if len(balancing_stack) == 0 and can_end is True:
                     break
                 for k in method[j]:
                     if k == '{':
                         # print('     before push: ', balancing_stack)
                         balancing_stack.append('{')
+                        can_end = True
                         # print('     after push: ', balancing_stack)
                     if k == '}' and len(balancing_stack) > 0:
                         # print('     before pop: ', balancing_stack)
                         balancing_stack.pop()
                         # print('     after pop: ', balancing_stack)
+
             removable_line_blocks.append(removable_line_block)
     # print(removable_line_blocks)
     print_removable_blocks(removable_line_blocks)
