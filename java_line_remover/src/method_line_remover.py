@@ -58,7 +58,7 @@ def generate_incomplete_method(methods, current_method, method_lines, removable_
 
 
 def main():
-    df = pd.read_csv('result.csv')
+    df = pd.read_csv('./result.csv')
     methods = df
     methods = methods.drop('id', axis=1)
     for index, row in methods.iterrows():
@@ -74,7 +74,7 @@ def main():
             methods = generate_incomplete_method(methods, current_method, method_lines, i)
     methods = methods.reset_index()
     methods = methods.drop('index', axis=1)
-    methods.to_csv('results_test.csv')
+    methods.to_csv('./results_test.csv')
 
 
 main()
