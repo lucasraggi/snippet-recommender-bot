@@ -4,7 +4,7 @@ from treat_methods import TreatMethods
 from treat_class import TreatClass
 
 class Split:
-    def __init__(self):
+    def __init__(self, common_methods):
         self.treat_methods = TreatMethods()
         self.treat_class = TreatClass()
         self.code_lines = list()
@@ -15,6 +15,8 @@ class Split:
         self.class_name = None
         self.line = None
         self.method_name = None
+
+        self.common_methods = common_methods
 
     def work_in_file(self, file):
         with open(file, errors='ignore') as f:
@@ -56,6 +58,9 @@ class Split:
                         self.create_new_method_object_and_clear_list()
 
     def create_new_method_object_and_clear_list(self):
-        new_method = Method(self.method_name, self.code_lines.copy(), self.class_name)
-        self.all_methods.append(new_method)
-        self.code_lines.append(new_method)
+        if self.method_name in self.common_methods:
+            new_method = Method(self.method_name, self.code_lines.copy(), self.class_name)
+            self.all_methods.append(new_method)
+            self.code_lines.clear()
+
+

@@ -6,12 +6,19 @@ class TreatMethods:
         if re.search('(public|private|protected).+{', string) \
                 and not self.is_constructor_method(tokens, class_name)\
                 and not self.is_main_method(tokens)\
-                and not self.is_interface_caller(tokens):
+                and not self.is_interface_caller(tokens)\
+                and not self.is_test_method(tokens)\
+                and '(' in tokens:
             return True
         return False
 
     def is_constructor_method(self, tokens, class_name):
         if class_name in tokens:
+            return True
+        return False
+
+    def is_test_method(self, tokens):
+        if 'test' in tokens:
             return True
         return False
 
