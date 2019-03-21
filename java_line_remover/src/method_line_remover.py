@@ -1,5 +1,6 @@
 import re
 import pandas as pd
+import pcre
 
 
 def print_method_lines(method_lines):
@@ -27,14 +28,62 @@ def get_removable_line_indexes(method_lines):
     return removable_indexes
 
 
+def print_removable_blocks(removable_line_blocks):
+    print('[', end='')
+    for i in removable_line_blocks:
+        print('[', i[0], '-', i[-1], ']', end='')
+    print(']')
+
+
+def get_removable_line_blocks_indexes(method_lines):
+    if_begin_regex = pcre.compile(
+        r"if\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
+    for_begin_regex = pcre.compile(
+        r"for\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
+    with open("in", "r") as file:
+        method = file.readlines()
+    size = len(method)
+    removable_line_blocks = []
+    for i in range(size):
+        # checks if the line has a for or if
+        if for_begin_regex.search(method[i]) is not None or if_begin_regex.search(method[i]) is not None:
+            balancing_stack = []
+            if method[i][-2] == '{':
+                balancing_stack.append('{')
+            removable_line_block = []
+            can_end = False
+            # print('CURRENT METHOD: ', method[i])
+            for j in range(i + 1, size):
+                removable_line_block.append(j)
+                if len(balancing_stack) == 0 and can_end is True:
+                    break
+                for k in method[j]:
+                    if k == '{':
+                        # print('     before push: ', balancing_stack)
+                        balancing_stack.append('{')
+                        can_end = True
+                        # print('     after push: ', balancing_stack)
+                    if k == '}' and len(balancing_stack) > 0:
+                        # print('     before pop: ', balancing_stack)
+                        balancing_stack.pop()
+                        # print('     after pop: ', balancing_stack)
+
+            removable_line_blocks.append(removable_line_block)
+    # print(removable_line_blocks)
+    print_removable_blocks(removable_line_blocks)
+
+
 def get_removable_indexes_variances(removable_indexes):
     removable_indexes_list = []  # list of list of removable indexes
     size = len(removable_indexes)
-    variances_number = 5
+    variances_number = 5  # number of removable indexes generated
     number_lines = int(size / variances_number)
     for i in range(1, variances_number):
         slicing = number_lines * i
         removable_indexes_list.append(removable_indexes[slicing:])
+    removable_indexes_list = set(map(tuple, removable_indexes_list))  # removing duplicates from list
+    removable_indexes_list = list(map(list, removable_indexes_list))
+
     return removable_indexes_list
 
 
@@ -58,23 +107,23 @@ def generate_incomplete_method(methods, current_method, method_lines, removable_
 
 
 def main():
-    df = pd.read_csv('./result.csv')
-    methods = df
-    methods = methods.drop('id', axis=1)
-    for index, row in methods.iterrows():
-        method = row['codes']
-        method_lines = pre_process_method(method)
-        removable_indexes = get_removable_line_indexes(method_lines)
-        removable_indexes_list = get_removable_indexes_variances(removable_indexes)
-        current_method = methods.loc[index]
-        methods = methods.drop(index)
-        methods = add_method_by_method_lines(methods, current_method, method_lines)
-        print_method_lines(method_lines)
-        for i in removable_indexes_list:
-            methods = generate_incomplete_method(methods, current_method, method_lines, i)
-    methods = methods.reset_index()
-    methods = methods.drop('index', axis=1)
-    methods.to_csv('./results_test.csv')
+    get_removable_line_blocks_indexes('test')
+    # df = pd.read_csv('result.csv')
+    # methods = df.head(5)
+    # methods = methods.drop('id', axis=1)
+    # for index, row in methods.iterrows():
+    #     method = row['codes']
+    #     method_lines = pre_process_method(method)
+    #     removable_indexes = get_removable_line_indexes(method_lines)
+    #     removable_indexes_list = get_removable_indexes_variances(removable_indexes)
+    #     current_method = methods.loc[index]
+    #     methods = methods.drop(index)
+    #     methods = add_method_by_method_lines(methods, current_method, method_lines)
+    #     for i in removable_indexes_list:
+    #         methods = generate_incomplete_method(methods, current_method, method_lines, i)
+    # methods = methods.reset_index()
+    # methods = methods.drop('index', axis=1)
+    # methods.to_csv('results_test.csv')
 
 
 main()
