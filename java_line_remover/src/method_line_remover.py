@@ -40,7 +40,7 @@ def get_removable_line_blocks_indexes(method_lines):
         r"if\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
     for_begin_regex = pcre.compile(
         r"for\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
-    with open("in", "r") as file:
+    with open("../in", "r") as file:
         method = file.readlines()
     size = len(method)
     removable_line_blocks = []
@@ -48,25 +48,41 @@ def get_removable_line_blocks_indexes(method_lines):
         # checks if the line has a for or if
         if for_begin_regex.search(method[i]) is not None or if_begin_regex.search(method[i]) is not None:
             balancing_stack = []
-            if method[i][-2] == '{':
-                balancing_stack.append('{')
-            removable_line_block = []
+            quotation_stack = []
+            double_quotation_stack = []
             can_end = False
-            # print('CURRENT METHOD: ', method[i])
-            for j in range(i + 1, size):
-                removable_line_block.append(j)
+            removable_line_block = []
+            # print('CURRENT FOR or IF: ')
+            for j in range(i, size):
                 if len(balancing_stack) == 0 and can_end is True:
                     break
+                if j > i + 1 and can_end is False and len(balancing_stack) == 0:  # one line for or if without '{ }"
+                    break
+                removable_line_block.append(j + 1)  # +1 because the lines start with 1 and index with 0
+                # print('     CURR LINE: ', method[j], end='')
                 for k in method[j]:
-                    if k == '{':
-                        # print('     before push: ', balancing_stack)
+                    if len(quotation_stack) == 0 and len(double_quotation_stack) == 0:  # if its not inside string, can add
+                        can_add = True
+                    else:
+                        can_add = False
+                    if k == '\'' and len(quotation_stack) == 0:  # checks if '{' is inside string ex: a = " { "
+                        quotation_stack.append('\'')
+                    elif k == '\'' and len(quotation_stack) > 0:
+                        quotation_stack.pop()
+                    if k == '\"' and len(quotation_stack) == 0:
+                        double_quotation_stack.append('\'')
+                    elif k == '\"' and len(quotation_stack) > 0:
+                        double_quotation_stack.pop()
+
+                    if k == '{' and can_add:
+                        # print('         before push: ', balancing_stack)
                         balancing_stack.append('{')
                         can_end = True
-                        # print('     after push: ', balancing_stack)
-                    if k == '}' and len(balancing_stack) > 0:
-                        # print('     before pop: ', balancing_stack)
+                        # print('         after push: ', balancing_stack)
+                    if k == '}' and len(balancing_stack) > 0 and can_add:
+                        # print('         before pop: ', balancing_stack)
                         balancing_stack.pop()
-                        # print('     after pop: ', balancing_stack)
+                        # print('         after pop: ', balancing_stack)
 
             removable_line_blocks.append(removable_line_block)
     # print(removable_line_blocks)
@@ -108,7 +124,7 @@ def generate_incomplete_method(methods, current_method, method_lines, removable_
 
 def main():
     get_removable_line_blocks_indexes('test')
-    # df = pd.read_csv('result.csv')
+    # df = pd.read_csv('./result.csv')
     # methods = df.head(5)
     # methods = methods.drop('id', axis=1)
     # for index, row in methods.iterrows():
