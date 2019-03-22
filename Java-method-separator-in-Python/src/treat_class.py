@@ -1,8 +1,8 @@
 import re
 
 class TreatClass:
-    def is_abstract_class(self, tokens):
-        if 'abstract' in tokens:
+    def is_abstract_or_final_class(self, tokens):
+        if 'abstract' in tokens or 'final' in tokens:
             return True
         return False
 
@@ -19,9 +19,8 @@ class TreatClass:
 
     def define_class_name(self, tokens):
         if self.is_class_type(tokens):
-            if self.is_abstract_class(tokens):
+            if self.is_abstract_or_final_class(tokens):
                 return tokens[3]
             return tokens[2]
-        else:
-            return tokens[1]
+
 
