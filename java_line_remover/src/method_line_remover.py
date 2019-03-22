@@ -44,8 +44,12 @@ def get_removable_line_blocks_indexes(method_lines):
         method = file.readlines()
     size = len(method)
     removable_line_blocks = []
+    jump_line = 0
     for i in range(size):
         # checks if the line has a for or if
+        if jump_line > 0:
+            jump_line -= 1
+            continue
         if for_begin_regex.search(method[i]) is not None or if_begin_regex.search(method[i]) is not None:
             balancing_stack = []
             quotation_stack = []
@@ -53,13 +57,23 @@ def get_removable_line_blocks_indexes(method_lines):
             can_end = False
             removable_line_block = []
             # print('CURRENT FOR or IF: ')
+            temp = i
+            while if_begin_regex.search(method[temp + 1]) is not None:  # chained one line if (recursive)
+                # print('##############\nwhile loop\n', method[temp], method[temp + 1], '###################')
+                jump_line += 1
+                temp += 1
+            while for_begin_regex.search(method[temp + 1]) is not None:  # chained one line for (recursive)
+                # print('##############\nwhile loop\n', method[temp], method[temp + 1], '###################')
+                jump_line += 1
+                temp += 1
             for j in range(i, size):
+                #  print('     i = ', i, 'CURR LINE: ', method[j], end='')
                 if len(balancing_stack) == 0 and can_end is True:
                     break
-                if j > i + 1 and can_end is False and len(balancing_stack) == 0:  # one line for or if without '{ }"
+                if j > i + 1 and can_end is False and len(balancing_stack) == 0 and re.search(r'[;][\s]*$', method[i + 1]) is not None:  # one line for or if without '{ }"
                     break
                 removable_line_block.append(j + 1)  # +1 because the lines start with 1 and index with 0
-                # print('     CURR LINE: ', method[j], end='')
+
                 for k in method[j]:
                     if len(quotation_stack) == 0 and len(double_quotation_stack) == 0:  # if its not inside string, can add
                         can_add = True
