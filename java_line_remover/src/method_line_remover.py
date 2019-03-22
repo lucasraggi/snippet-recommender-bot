@@ -38,6 +38,8 @@ def print_removable_blocks(removable_line_blocks):
 def get_removable_line_blocks_indexes(method_lines):
     if_begin_regex = pcre.compile(
         r"if\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
+    elif_begin_regex = pcre.compile(
+        r"else if\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
     for_begin_regex = pcre.compile(
         r"for\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
     with open("../in", "r") as file:
@@ -50,7 +52,7 @@ def get_removable_line_blocks_indexes(method_lines):
         if jump_line > 0:
             jump_line -= 1
             continue
-        if for_begin_regex.search(method[i]) is not None or if_begin_regex.search(method[i]) is not None:
+        if for_begin_regex.search(method[i]) is not None or if_begin_regex.search(method[i]) is not None or elif_begin_regex.search(method[i]):
             balancing_stack = []
             quotation_stack = []
             double_quotation_stack = []
@@ -58,11 +60,15 @@ def get_removable_line_blocks_indexes(method_lines):
             removable_line_block = []
             # print('CURRENT FOR or IF: ')
             temp = i
-            while if_begin_regex.search(method[temp + 1]) is not None:  # chained one line if (recursive)
+            while if_begin_regex.search(method[temp]) is not None and if_begin_regex.search(method[temp + 1]) is not None:  # chained one line if (recursive)
                 # print('##############\nwhile loop\n', method[temp], method[temp + 1], '###################')
                 jump_line += 1
                 temp += 1
-            while for_begin_regex.search(method[temp + 1]) is not None:  # chained one line for (recursive)
+            while elif_begin_regex.search(method[temp]) is not None and elif_begin_regex.search(method[temp + 1]) is not None:  # chained one line for (recursive)
+                # print('##############\nwhile loop\n', method[temp], method[temp + 1], '###################')
+                jump_line += 1
+                temp += 1
+            while for_begin_regex.search(method[temp]) is not None and for_begin_regex.search(method[temp + 1]) is not None:  # chained one line for (recursive)
                 # print('##############\nwhile loop\n', method[temp], method[temp + 1], '###################')
                 jump_line += 1
                 temp += 1
