@@ -42,8 +42,6 @@ def get_removable_line_blocks_indexes(method_lines):  # get removable lines of f
         r"for\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
     while_begin_regex = pcre.compile(
         r"while\s*\(((?:(?:(?:\"(?:(?:\\\")|[^\"])*\")|(?:'(?:(?:\\')|[^'])*'))|[^\(\)]|\((?1)\))*)\)")
-    with open("../in", "r") as file:
-        method_lines = file.readlines()
     size = len(method_lines)
     removable_line_blocks = []
     jump_line = 0
@@ -82,7 +80,7 @@ def get_removable_line_blocks_indexes(method_lines):  # get removable lines of f
                     break
                 if j > i + 1 and can_end is False and len(balancing_stack) == 0 and re.search(r'[;][\s]*$', method_lines[i + 1]) is not None:  # one line for or if without '{ }"
                     break
-                removable_line_block.append(j + 1)  # +1 because the lines start with 1 and index with 0
+                removable_line_block.append(j)  #
 
                 for k in method_lines[j]:
                     if len(quotation_stack) == 0 and len(double_quotation_stack) == 0:  # if its not inside string, can add
@@ -107,9 +105,7 @@ def get_removable_line_blocks_indexes(method_lines):  # get removable lines of f
                         # print('         before pop: ', balancing_stack)
                         balancing_stack.pop()
                         # print('         after pop: ', balancing_stack)
-
             removable_line_blocks.append(removable_line_block)
     # print(removable_line_blocks)
     print_removable_blocks(removable_line_blocks)
-    #get_non_overlapping_blocks_indexes(removable_line_blocks)
     return removable_line_blocks
