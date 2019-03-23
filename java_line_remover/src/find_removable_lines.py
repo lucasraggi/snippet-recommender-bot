@@ -1,6 +1,7 @@
 import re
 from collections import OrderedDict
 
+
 def get_removable_line_indexes(method_lines):
     removable_indexes = []
     size = len(method_lines)
@@ -35,7 +36,7 @@ def get_removable_indexes_variances(method_lines, removable_indexes, removable_b
             temp.append(i)
         lines_to_be_removed.append(temp)
         curr_variance_size += line_number_increment
-    
+
     valid_lines_to_be_removed = []  # eliminating only lines that results in a valid method
     for i in range(len(lines_to_be_removed)):
         temp = []
@@ -45,20 +46,11 @@ def get_removable_indexes_variances(method_lines, removable_indexes, removable_b
         for j in range(len(removable_indexes) - 1, -1, -1):
             if removable_indexes[j] in lines_to_be_removed[i]:
                 temp.append(removable_indexes[j])
-                temp = list(OrderedDict.fromkeys(valid_lines_to_be_removed))  # eliminate duplicates
+                temp = list(OrderedDict.fromkeys(temp))  # eliminate duplicates
                 temp.sort(reverse=True)  # sort in reverse order
         valid_lines_to_be_removed.append(temp)
-        print(temp)
-        print(temp)
-        break
-    # print(lines_to_be_removed)
-    # removable_indexes_list = []  # list of list of removable indexes
-    # size = len(removable_indexes)
-    # variances_number = 5  # number of removable indexes generated
-    # number_lines = int(size / variances_number)
-    # for i in range(1, variances_number):
-    #     slicing = number_lines * i
-    #     removable_indexes_list.append(removable_indexes[slicing:])
-    # removable_indexes_list = set(map(tuple, removable_indexes_list))  # removing duplicates from list
-    # removable_indexes_list = list(map(list, removable_indexes_list))
-    # return removable_indexes_list
+    # for i in range(len(lines_to_be_removed)):
+    #     print(lines_to_be_removed[i])
+    #     print(valid_lines_to_be_removed[i])
+    #     print('###########################################')
+    return valid_lines_to_be_removed

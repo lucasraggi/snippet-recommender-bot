@@ -107,5 +107,5 @@ def get_removable_line_blocks_indexes(method_lines):  # get removable lines of f
                         # print('         after pop: ', balancing_stack)
             removable_line_blocks.append(removable_line_block)
     # print(removable_line_blocks)
-    print_removable_blocks(removable_line_blocks)
+    # print_removable_blocks(removable_line_blocks)
     return removable_line_blocks
