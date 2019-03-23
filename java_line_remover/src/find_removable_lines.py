@@ -26,7 +26,7 @@ def is_first_inside_second(first, second):
 # Output: list of list of removable indexes
 def get_removable_indexes_variances(method_lines, removable_indexes, removable_block_indexes):
     method_size = len(method_lines)
-    line_number_increment = int(method_size/6)
+    line_number_increment = max(int(method_size/6), 1)
     curr_variance_size = line_number_increment*2
 
     lines_to_be_removed = []

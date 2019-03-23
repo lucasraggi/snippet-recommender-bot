@@ -91,9 +91,9 @@ def get_removable_line_blocks_indexes(method_lines):  # get removable lines of f
                         quotation_stack.append('\'')
                     elif k == '\'' and len(quotation_stack) > 0:
                         quotation_stack.pop()
-                    if k == '\"' and len(quotation_stack) == 0:
+                    if k == '\"' and len(double_quotation_stack) == 0:
                         double_quotation_stack.append('\'')
-                    elif k == '\"' and len(quotation_stack) > 0:
+                    elif k == '\"' and len(double_quotation_stack) > 0:
                         double_quotation_stack.pop()
 
                     if k == '{' and can_add:

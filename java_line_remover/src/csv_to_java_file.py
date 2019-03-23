@@ -17,7 +17,7 @@ def main():
         file_start_string = 'public class ' + method_name + ' {\n\n'
         method = row['codes']
         file_end_string = '\n}'
-        string_to_file = file_start_string + method + file_end_string
+        string_to_file = file_start_string + str(method) + file_end_string
         f.write(string_to_file)
         f.close()
         file_count += 1
