@@ -42,22 +42,22 @@ def generate_incomplete_method(methods, current_method, method_lines, removable_
 
 def main():
     get_removable_line_blocks_indexes('test')
-    # df = pd.read_csv('./result.csv')
-    # methods = df.head(5)
-    # methods = methods.drop('id', axis=1)
-    # for index, row in methods.iterrows():
-    #     method = row['codes']
-    #     method_lines = pre_process_method(method)
-    #     removable_indexes = get_removable_line_indexes(method_lines)
-    #     removable_indexes_list = get_removable_indexes_variances(removable_indexes)
-    #     current_method = methods.loc[index]
-    #     methods = methods.drop(index)
-    #     methods = add_method_by_method_lines(methods, current_method, method_lines)
-    #     for i in removable_indexes_list:
-    #         methods = generate_incomplete_method(methods, current_method, method_lines, i)
-    # methods = methods.reset_index()
-    # methods = methods.drop('index', axis=1)
-    # methods.to_csv('results_test.csv')
+    df = pd.read_csv('./result.csv')
+    methods = df.head(1)
+    methods = methods.drop('id', axis=1)
+    for index, row in methods.iterrows():
+        method = row['codes']
+        method_lines = pre_process_method(method)
+        removable_indexes = get_removable_line_indexes(method_lines)
+        removable_indexes_list = get_removable_indexes_variances(removable_indexes)
+        current_method = methods.loc[index]
+        methods = methods.drop(index)
+        methods = add_method_by_method_lines(methods, current_method, method_lines)
+        for i in removable_indexes_list:
+            methods = generate_incomplete_method(methods, current_method, method_lines, i)
+    methods = methods.reset_index()
+    methods = methods.drop('index', axis=1)
+    methods.to_csv('results_test.csv')
 
 
 main()
