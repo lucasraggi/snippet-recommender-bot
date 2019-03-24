@@ -61,7 +61,7 @@ def main():
         methods = add_method_by_method_lines(methods, current_method, method_lines)
         for i in valid_lines_to_be_removed:
             methods = generate_incomplete_method(methods, current_method, method_lines, i)
-    methods = methods.reset_index()
+    methods = methods.sample(frac=1).reset_index(drop=True)  # Shuffle rows
     methods = methods.drop('index', axis=1)
     methods.to_csv('../results_variances.csv')
 
