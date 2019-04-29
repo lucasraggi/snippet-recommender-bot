@@ -17,3 +17,16 @@ class MySqlOperator:
         except mysql.connector.Error as err:
             print("ERROR in select table from table {}".format(err))
 
+    def select_class_and_name_from_table(self):
+        try:
+            self.mycursor.execute('SELECT name, class from methods')
+            return self.mycursor.fetchall()
+        except mysql.connector.Error as err:
+            print('ERROR in select name and class {}'.format(err))
+
+    def close_connection(self):
+        self.mydb.close()
+
+    def reset_query_cache(self):
+        self.mycursor.execute('RESET QUERY CACHE')
+
