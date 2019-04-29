@@ -1,5 +1,6 @@
 import mysql.connector
 
+
 class MySqlOperator:
     def __init__(self):
         self.mydb = mysql.connector.connect(
@@ -29,4 +30,5 @@ class MySqlOperator:
 
     def reset_query_cache(self):
         self.mycursor.execute('RESET QUERY CACHE')
+
 
