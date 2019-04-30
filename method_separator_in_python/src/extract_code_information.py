@@ -14,7 +14,7 @@ def get_parameters(code_header):
         parameter = None
     else:
         parameter = code_header[begin + 1:end]
-    return parameter
+    return parameter, begin, end
 
 
 def get_number_parameters(parameters):
@@ -33,15 +33,22 @@ def get_types_parameters(parameter):
     return types_parameters
 
 
-def extractor():
-    file = open('in', 'r')
-    code_header = file.readline()
-    print(code_header, end='')
-    parameter = get_parameters(code_header)  # begin and end of parameters
+def get_return_type(code_header, begin):
+    if begin == -1:
+        return
+    print(code_header)
+    
+
+
+def extractor(code_header):
+    # file = open('in', 'r')
+    # code_header = file.readline()
+    parameter, begin, end = get_parameters(code_header)  # begin and end of parameters
     if parameter is None:
         return
     number_parameters = get_number_parameters(parameter)
     types_parameters = get_types_parameters(parameter)
+    return_type = get_return_type(code_header, begin)
 
 
-extractor()
+#extractor()
