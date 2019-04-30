@@ -1,4 +1,4 @@
-# extract number of parameters, type of parameters, type of return of method
+# extract number of parameters, type of parameters
 
 
 def get_parameters(code_header):
@@ -16,6 +16,21 @@ def get_parameters(code_header):
         parameter = code_header[begin + 1:end]
     return parameter
 
+
+def get_number_parameters(parameters):
+    number_parameters = len(parameters.split(','))
+    return number_parameters
+
+
+def get_types_parameters(parameter):
+    types_parameters = []
+    parameters = parameter.split(',')
+    for param in parameters:
+        temp = param.lstrip()  # remove whitespace, tab and newline from begin of string
+        temp = temp.rstrip()  # remove whitespace, tab and newline from end of string
+        temp = temp.split(' ')  # separate string by space
+        types_parameters.append(temp[0])  # temp[0] is var type and temp[1] is var name
+    return types_parameters
 
 
 def extractor():
