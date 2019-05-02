@@ -1,5 +1,6 @@
 import mysql.connector
 
+
 class MySqlOperator:
     def __init__(self):
         self.mydb = mysql.connector.connect(

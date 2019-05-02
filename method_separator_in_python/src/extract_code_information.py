@@ -39,7 +39,6 @@ def get_return_type(code_header, begin):
     print(code_header)
     
 
-
 def extractor(code_header):
     # file = open('in', 'r')
     # code_header = file.readline()
@@ -51,4 +50,4 @@ def extractor(code_header):
     return_type = get_return_type(code_header, begin)
 
 
-#extractor()
+# extractor()
