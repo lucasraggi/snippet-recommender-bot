@@ -10,17 +10,18 @@ class UserMethod:
 
 
 class RecommendationMethod:
-    def __init__(self, code, number_parameters, parameter_types, return_type, points):
+    def __init__(self, code, number_parameters, parameter_types, return_type):
         self.code = code
         self.number_parameters = number_parameters
         self.parameter_types = parameter_types
         self.return_type = return_type
-        self.points = points
+        self.points = 0
 
 
 def rank_methods(user_method, recommendation_method_list):
-    
-
+    for method in recommendation_method_list:
+        points = 0
+        
     return recommendation_method_list
 
 
