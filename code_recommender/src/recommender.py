@@ -1,5 +1,5 @@
 from sqlconnector import MySqlOperator
-
+import json
 
 class UserMethod:
     def __init__(self, method_name, number_parameters, parameter_types, return_type):
@@ -59,5 +59,11 @@ def recommender(method_name, number_parameters, parameter_types, return_type):
         recommendation_method_list.append(method)
     recommendation_method_list = rank_methods(user_method, recommendation_method_list)
     recommendation_method_list.sort(key=lambda x: x.points, reverse=True)
+    dict_list = []
+    for i in recommendation_method_list:
+        method_dict = {'code': str(i.code), 'points': str(i.points)}
+        dict_list.append(method_dict)
+    return json.dumps(dict_list)
+
 
 
