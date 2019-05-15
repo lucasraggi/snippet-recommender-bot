@@ -1,5 +1,4 @@
 import tensorflow as tf
-import common
 
 no_such_word = 'NOSUCH'
 no_such_composite = no_such_word + ',' + no_such_word + ',' + no_such_word

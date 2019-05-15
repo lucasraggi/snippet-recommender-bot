@@ -1,7 +1,7 @@
-from common import Config, VocabType
+from src.common import Config, VocabType
 from argparse import ArgumentParser
-from interactive_predict import InteractivePredictor
-from model import Model
+from src.interactive_predict import InteractivePredictor
+from src.model import Model
 import sys
 
 if __name__ == '__main__':

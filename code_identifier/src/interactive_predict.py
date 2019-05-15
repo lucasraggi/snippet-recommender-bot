@@ -1,7 +1,5 @@
-import traceback
-
-from common import common
-from extractor import Extractor
+from src.common import common
+from src.extractor import Extractor
 
 SHOW_TOP_CONTEXTS = 10
 MAX_PATH_LENGTH = 8

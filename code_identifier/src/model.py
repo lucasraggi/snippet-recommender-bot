@@ -1,10 +1,10 @@
 import tensorflow as tf
 
-import PathContextReader
+from src import PathContextReader
 import numpy as np
 import time
 import pickle
-from common import common, VocabType
+from src.common import common, VocabType
 
 
 class Model:
