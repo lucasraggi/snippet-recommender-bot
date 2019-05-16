@@ -8,6 +8,7 @@ class UserMethod:
         self.parameter_types = parameter_types
         self.return_type = return_type
 
+
 class RecommendationMethod:
     def __init__(self, code, number_parameters, parameter_types, return_type):
         self.code = code
@@ -45,7 +46,6 @@ def rank_methods(user_method, recommendation_method_list):
         parameter_type_points = match/len(bigger) * 2
         method.points = return_type_points + number_parameters_points + parameter_type_points
     return recommendation_method_list
-
 
 def recommender(method_name, number_parameters, parameter_types, return_type):
     user_method = UserMethod(method_name, number_parameters, parameter_types, return_type)

@@ -5,7 +5,7 @@ class MySqlOperator:
         self.mydb = mysql.connector.connect(
             host = '127.0.0.1',
             user = 'root',
-            database = 'java_methods',
+            database = 'java_codes_recommender',
             passwd = ''
         )
         self.mycursor = self.mydb.cursor()
@@ -22,6 +22,7 @@ class MySqlOperator:
         try:
             self.mycursor.execute('CREATE TABLE IF NOT EXISTS methods ('
                                   'id int not null auto_increment,'
+                                  'method_name varchar(255),'
                                   'code longtext, '
                                   'number_parameters int,'
                                   'parameters_types varchar(255),'
@@ -29,6 +30,13 @@ class MySqlOperator:
                                   'primary key (id)) default char set utf8mb4;')
         except mysql.connector.Error as err:
             print('ERROR in create table {}'.format(err))
+
+    def insert_table(self, method_name, code, number_parameters, parameter_types, return_type):
+        try:
+            self.mycursor.execute('INSERT INTO METHODS (method_name, code, number_parameters, parameters_type, return_type)'
+                                  'values(%s, %s, %s, %s, %s)',(method_name, code, number_parameters, parameter_types, return_type))
+        except mysql.connector.Error as err:
+            print("ERROR in insert table {}".format(err))
 
     def select_method(self, method_name):
         try:
