@@ -1,10 +1,10 @@
 from nltk.tokenize import word_tokenize
-from java_method import Method
-from treat_methods import TreatMethods
-from treat_class import TreatClass
+from method_separator_in_python.src.java_method import Method
+from method_separator_in_python.src.treat_methods import TreatMethods
+from method_separator_in_python.src.treat_class import TreatClass
 
 class Split:
-    def __init__(self, common_methods):
+    def __init__(self):
         self.treat_methods = TreatMethods()
         self.treat_class = TreatClass()
         self.code_lines = list()
@@ -15,8 +15,6 @@ class Split:
         self.class_name = None
         self.line = None
         self.method_name = None
-
-        self.common_methods = common_methods
 
     def work_in_file(self, file):
         with open(file, errors='ignore') as f:
@@ -58,9 +56,9 @@ class Split:
                         self.create_new_method_object_and_clear_list()
 
     def create_new_method_object_and_clear_list(self):
-        if self.method_name in self.common_methods:
-            new_method = Method(self.method_name, self.code_lines.copy(), self.class_name)
-            self.all_methods.append(new_method)
-            self.code_lines.clear()
+        new_method = Method(self.method_name, self.code_lines.copy(), self.class_name)
+        print(new_method)
+        self.all_methods.append(new_method)
+        self.code_lines.clear()
 
 

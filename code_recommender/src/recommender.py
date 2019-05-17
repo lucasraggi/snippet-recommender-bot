@@ -46,6 +46,7 @@ def rank_methods(user_method, recommendation_method_list):
         method.points = return_type_points + number_parameters_points + parameter_type_points
     return recommendation_method_list
 
+
 def generate_methods_to_recommender(method_name):
     similar_methods = list()
     get = MySqlOperator().select_method(method_name)
@@ -53,6 +54,7 @@ def generate_methods_to_recommender(method_name):
         object = RecommendationMethod(data[2], data[3], data[4], data[5])
         similar_methods.append(object)
     return similar_methods
+
 
 def recommender(method_name, number_parameters, parameter_types, return_type):
     user_method = UserMethod(method_name, number_parameters, parameter_types, return_type)
@@ -65,18 +67,5 @@ def recommender(method_name, number_parameters, parameter_types, return_type):
         method_dict = {'code': str(i.code), 'points': str(i.points)}
         dict_list.append(method_dict)
     return json.dumps(dict_list)
-
-
-    """recommendation_method_list = []
-    for similar_method in range(similar_methods):
-        method = RecommendationMethod(similar_method, 0)
-        recommendation_method_list.append(method)
-    recommendation_method_list = rank_methods(user_method, recommendation_method_list)
-    recommendation_method_list.sort(key=lambda x: x.points, reverse=True)
-    dict_list = []
-    for i in recommendation_method_list:
-        method_dict = {'code': str(i.code), 'points': str(i.points)}
-        dict_list.append(method_dict)
-    return json.dumps(dict_list)"""
 
 
