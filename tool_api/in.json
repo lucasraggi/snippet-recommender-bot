@@ -1,0 +1,1 @@
+{"_class":"class_test","method":"method_test","code":"package project_test.princ_classes;\n\npublic class class_test {\n\tpublic static void method_test() {\n\t\tint a \u003d 2;\n\t}\n}\n"}

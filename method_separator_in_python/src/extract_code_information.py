@@ -39,15 +39,17 @@ def get_return_type(code_header, begin):
     print(code_header)
     
 
-def extractor(code_header):
+def extractor(method_lines):
     # file = open('in', 'r')
     # code_header = file.readline()
+    code_header = method_lines[0]
     parameter, begin, end = get_parameters(code_header)  # begin and end of parameters
     if parameter is None:
         return
     number_parameters = get_number_parameters(parameter)
     types_parameters = get_types_parameters(parameter)
     return_type = get_return_type(code_header, begin)
+    return number_parameters, types_parameters, return_type
 
 
 # extractor()
