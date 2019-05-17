@@ -1,14 +1,12 @@
 from code_recommender.src.sqlconnector import MySqlOperator
 import json
 
-
 class UserMethod:
     def __init__(self, method_name, number_parameters, parameter_types, return_type):
         self.method_name = method_name
         self.number_parameters = number_parameters
         self.parameter_types = parameter_types
         self.return_type = return_type
-
 
 class RecommendationMethod:
     def __init__(self, code, number_parameters, parameter_types, return_type):
