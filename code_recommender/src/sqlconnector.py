@@ -5,7 +5,6 @@ class MySqlOperator:
         self.mydb = mysql.connector.connect(
             host = '127.0.0.1',
             user = 'root',
-            database = 'java_codes_recommender',
             passwd = ''
         )
         self.mycursor = self.mydb.cursor()
@@ -15,6 +14,7 @@ class MySqlOperator:
     def create_database(self):
         try:
             self.mycursor.execute('CREATE DATABASE IF NOT EXISTS java_codes_recommender')
+            self.mycursor.execute('USE java_codes_recommender')
         except mysql.connector.Error as err:
             print('ERROR in create database {}'.format(err))
 
@@ -33,14 +33,14 @@ class MySqlOperator:
 
     def insert_table(self, method_name, code, number_parameters, parameter_types, return_type):
         try:
-            self.mycursor.execute('INSERT INTO METHODS (method_name, code, number_parameters, parameters_type, return_type)'
+            self.mycursor.execute('INSERT INTO methods (method_name, code, number_parameters, parameters_types, return_type)'
                                   'values(%s, %s, %s, %s, %s)',(method_name, code, number_parameters, parameter_types, return_type))
         except mysql.connector.Error as err:
             print("ERROR in insert table {}".format(err))
 
     def select_method(self, method_name):
         try:
-            self.mycursor.execute('SELECT CODES FROM methods WHERE NAME = %s', (method_name,))
+            self.mycursor.execute('SELECT * FROM methods WHERE method_name = %s', (method_name,))
             return self.mycursor.fetchall()
         except mysql.connector.Error as err:
             print("ERROR in select table from table {}".format(err))

@@ -1,4 +1,4 @@
-from .sqlconnector  import MySqlOperator
+from code_recommender.src.sqlconnector import MySqlOperator
 import json
 
 class UserMethod:
@@ -7,7 +7,6 @@ class UserMethod:
         self.number_parameters = number_parameters
         self.parameter_types = parameter_types
         self.return_type = return_type
-
 
 class RecommendationMethod:
     def __init__(self, code, number_parameters, parameter_types, return_type):
@@ -47,11 +46,26 @@ def rank_methods(user_method, recommendation_method_list):
         method.points = return_type_points + number_parameters_points + parameter_type_points
     return recommendation_method_list
 
+def generate_methods_to_recommender(method_name):
+    similar_methods = list()
+    get = MySqlOperator().select_method(method_name)
+    for data in get:
+        object = RecommendationMethod(data[2], data[3], data[4], data[5])
+        similar_methods.append(object)
+    return similar_methods
+
 def recommender(method_name, number_parameters, parameter_types, return_type):
     user_method = UserMethod(method_name, number_parameters, parameter_types, return_type)
-    mysql_operator = MySqlOperator()
-    similar_methods = mysql_operator.select_name_from_table(user_method.method_name)
-    print(similar_methods)
+    recommendation_method_list = generate_methods_to_recommender(method_name)
+
+    recommendation_method_list = rank_methods(user_method, recommendation_method_list)
+    recommendation_method_list.sort(key=lambda x: x.points, reverse=True)
+    dict_list = []
+    for i in recommendation_method_list:
+        method_dict = {'code': str(i.code), 'points': str(i.points)}
+        dict_list.append(method_dict)
+    return json.dumps(dict_list)
+
 
     """recommendation_method_list = []
     for similar_method in range(similar_methods):
@@ -64,6 +78,5 @@ def recommender(method_name, number_parameters, parameter_types, return_type):
         method_dict = {'code': str(i.code), 'points': str(i.points)}
         dict_list.append(method_dict)
     return json.dumps(dict_list)"""
-
 
 
