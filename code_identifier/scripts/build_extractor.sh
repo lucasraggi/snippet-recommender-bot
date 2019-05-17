@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-cd JavaExtractor/JPredict
+cd ../src/JavaExtractor/JPredict
 mvn clean package
 cd ../../
