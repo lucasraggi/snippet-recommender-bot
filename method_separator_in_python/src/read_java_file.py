@@ -1,8 +1,7 @@
 import os
 import re
-from file_split_management import Split
-from mysql_connector import MySqlOperator
-from treat_code2vec_dataset import treat_code2vec_database
+from method_separator_in_python.src.file_split_management import Split
+from method_separator_in_python.src.mysql_connector import MySqlOperator
 
 class TreatDirectory:
     def __init__(self, directory):
@@ -16,8 +15,7 @@ class TreatDirectory:
     def split_java_files_and_add_to_sql(self, directory):
         mysql_operator = MySqlOperator()
         receive_objects = list()
-        common_methods = treat_code2vec_database()
-        split = Split(common_methods)
+        split = Split()
 
         for file in os.listdir(directory):
             try:
@@ -25,20 +23,21 @@ class TreatDirectory:
                     if self.is_java_file(file):
                         self.cout += 1
                         receive_objects = split.work_in_file(directory + '/' + file)
-                        mysql_operator.insert_table(receive_objects)
+                        print(receive_objects)
+                        #mysql_operator.insert_table(receive_objects)
                         receive_objects.clear()
 
                     if self.cout % 1000 == 0:
                         print('Commit in table - 1k')
-                        mysql_operator.commit_table()
-                        mysql_operator.reset_query_cache()
+                        #mysql_operator.commit_table()
+                        #mysql_operator.reset_query_cache()
                 else:
                     self.split_java_files_and_add_to_sql(directory + '/' + file)
             except:
                 print(directory + '/' + file)
 
-        mysql_operator.commit_table()
-        mysql_operator.close_connection()
+        #mysql_operator.commit_table()
+        #mysql_operator.close_connection()
 
     def is_java_file(self, file_name):
         if re.search(".+.java", file_name):
