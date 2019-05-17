@@ -1,10 +1,12 @@
-from src.common import Config, VocabType
+from common import Config, VocabType
 from argparse import ArgumentParser
-from src.interactive_predict import InteractivePredictor
-from src.model import Model
+from interactive_predict import InteractivePredictor
+from model import Model
 import sys
 
-if __name__ == '__main__':
+
+def main(raw_args=None):
+    print(raw_args)
     parser = ArgumentParser()
     parser.add_argument("-d", "--data", dest="data_path",
                         help="path to preprocessed dataset", required=False)
@@ -30,8 +32,7 @@ if __name__ == '__main__':
                         help='if specified and loading a trained model, release the loaded model for a lower model '
                              'size.')
     parser.add_argument('--predict', action='store_true')
-    args = parser.parse_args()
-
+    args = parser.parse_args(raw_args)
     config = Config.get_default_config(args)
 
     model = Model(config)
@@ -52,5 +53,7 @@ if __name__ == '__main__':
             print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
     if args.predict:
         predictor = InteractivePredictor(config, model)
-        predictor.predict()
+        list_return = predictor.predict()
+        return list_return
     model.close_session()
+
