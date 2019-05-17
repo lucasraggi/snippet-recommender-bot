@@ -36,7 +36,10 @@ def get_types_parameters(parameter):
 def get_return_type(code_header, begin):
     if begin == -1:
         return
-    print(code_header)
+    header_without_parameters = code_header[:begin]
+    header_without_parameters = header_without_parameters.split(' ')
+    return_type = header_without_parameters[-2]
+    return return_type
     
 
 def extractor(method_lines):
@@ -49,6 +52,7 @@ def extractor(method_lines):
     number_parameters = get_number_parameters(parameter)
     types_parameters = get_types_parameters(parameter)
     return_type = get_return_type(code_header, begin)
+
     return number_parameters, types_parameters, return_type
 
 

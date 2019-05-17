@@ -1,4 +1,5 @@
 from code_identifier.src.code2vec import main
+from method_separator_in_python.src.extract_code_information import extractor
 from code_recommender.src.recommender import recommender
 import json
 
@@ -23,9 +24,9 @@ def get_begin_end(code_lines, i):
 def get_method_lines(data):
     method = data['method']
     code_lines = data['code'].splitlines(True)
-    for i in code_lines:
-        print(i, end='')
-    print(code_lines[3:5])
+    # for i in code_lines:
+    #     print(i, end='')
+    # print(code_lines[3:5])
     for i in range(len(code_lines)):
         if method in code_lines[i]:
             method_begin, method_end = get_begin_end(code_lines, i)
@@ -37,8 +38,12 @@ def api():
     json_string = {"_class":"class_test","method":"method_test","code":"package project_test.princ_classes;\n\npublic class class_test {\n\tpublic static void method_test() {\n\t\tint a \u003d 2;\n\t}\n}\n"}
     data_dump = json.dumps(json_string)
     data = json.loads(data_dump)
-    get_method_lines(data)
+
+    method_lines = get_method_lines(data)
     # list_return = main(['--load', '../models/incomplete_dataset2/saved_model_iter30', '--predict'])
+    number_parameters, types_parameters, return_type = extractor(method_lines)
+    print(number_parameters, ' ', types_parameters, ' ', return_type)
+
     # print(list_return[0]['name'])
 
 
