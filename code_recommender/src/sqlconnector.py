@@ -50,4 +50,3 @@ class MySqlOperator:
 
     def reset_query_cache(self):
         self.mycursor.execute('RESET QUERY CACHE')
-
