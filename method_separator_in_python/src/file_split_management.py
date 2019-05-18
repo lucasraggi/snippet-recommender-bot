@@ -1,5 +1,6 @@
 from nltk.tokenize import word_tokenize
-from method_separator_in_python.src.java_method import Method
+from code_recommender.src.recommender import RecommendationMethod
+from method_separator_in_python.src import extract_code_information as extract
 from method_separator_in_python.src.treat_methods import TreatMethods
 from method_separator_in_python.src.treat_class import TreatClass
 
@@ -11,7 +12,6 @@ class Split:
         self.all_methods = list()
         self.all_class = list()
         self.stack = list()
-
         self.class_name = None
         self.line = None
         self.method_name = None
@@ -56,8 +56,12 @@ class Split:
                         self.create_new_method_object_and_clear_list()
 
     def create_new_method_object_and_clear_list(self):
-        new_method = Method(self.method_name, self.code_lines.copy(), self.class_name)
-        print(new_method)
+        datas = extract.extractor(self.code_lines.copy())
+        code = ' '.join(map(str, self.code_lines.copy()))
+        num_param = datas[0]
+        param_types = ' '.join(map(str, datas[1]))
+        return_type = datas[2]
+        new_method = RecommendationMethod(self.method_name, code, num_param, param_types, return_type)
         self.all_methods.append(new_method)
         self.code_lines.clear()
 

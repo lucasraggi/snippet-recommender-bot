@@ -1,5 +1,5 @@
 public class DataSet{
-    void bubbleSort(int arr[]) {
+    public void bubbleSort(int arr[]) {
         int n = arr.length;
         for (int i = 0; i < n-1; i++)
             for (int j = 0; j < n-i-1; j++)
@@ -12,7 +12,7 @@ public class DataSet{
                 }
     }
 
-    void bubbleSort(float arr[]) {
+    public void bubbleSort(float arr[]) {
         int n = arr.length;
         for (int i = 0; i < n-1; i++)
             for (int j = 0; j < n-i-1; j++)
@@ -25,7 +25,7 @@ public class DataSet{
                 }
     }
 
-    void bubbleSort(double arr[]) {
+    public void bubbleSort(double arr[]) {
         int n = arr.length;
         for (int i = 0; i < n-1; i++)
             for (int j = 0; j < n-i-1; j++)
@@ -39,7 +39,7 @@ public class DataSet{
     }
 
 
-    void selectionSort(int arr[]){
+    public void selectionSort(int arr[]){
         int n = arr.length;
  
         // One by one move boundary of unsorted subarray
@@ -59,7 +59,7 @@ public class DataSet{
         }
     }
         
-    void selectionSort(float arr[]){
+    public void selectionSort(float arr[]){
         int n = arr.length;
  
         // One by one move boundary of unsorted subarray
@@ -79,7 +79,7 @@ public class DataSet{
         }
     }
 
-    void sort(double arr[]){
+    public void sort(double arr[]){
         int n = arr.length;
  
         // One by one move boundary of unsorted subarray
@@ -99,7 +99,7 @@ public class DataSet{
         }
     }
 
-        int binarySearch(int arr[], int l, int r, int x) { 
+        public int binarySearch(int arr[], int l, int r, int x) {
             if (r>=l) 
             { 
                 int mid = l + (r - l)/2; 
@@ -124,7 +124,7 @@ public class DataSet{
             return -1; 
         } 
 
-        float binarySearch(float arr[], int l, int r, float x) { 
+        public float binarySearch(float arr[], int l, int r, float x) {
         if (r>=l) 
         { 
             int mid = l + (r - l)/2; 
@@ -149,7 +149,7 @@ public class DataSet{
         return -1; 
     } 
 
-    double binarySearch(double arr[], int l, int r, double x) { 
+    public double binarySearch(double arr[], int l, int r, double x) {
         if (r>=l) 
         { 
             int mid = l + (r - l)/2; 

@@ -33,7 +33,7 @@ class MySqlOperator:
 
     def insert_table(self, method_name, code, number_parameters, parameter_types, return_type):
         try:
-            self.mycursor.execute('INSERT INTO methods (method_name, code, number_parameters, parameters_types, return_type)'
+            self.mycursor.execute('INSERT INTO methods (method_name, code, number_parameters, parameters_types, return_type) '
                                   'values(%s, %s, %s, %s, %s)',(method_name, code, number_parameters, parameter_types, return_type))
         except mysql.connector.Error as err:
             print("ERROR in insert table {}".format(err))
@@ -47,6 +47,13 @@ class MySqlOperator:
 
     def close_connection(self):
         self.mydb.close()
+
+    def commit_table(self):
+        try:
+            self.mydb.commit()
+        except mysql.connector.Error as err:
+            self.mydb.commit()
+            print("ERROR in commit table {}".format(err))
 
     def reset_query_cache(self):
         self.mycursor.execute('RESET QUERY CACHE')

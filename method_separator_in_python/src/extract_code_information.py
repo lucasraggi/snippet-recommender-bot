@@ -43,8 +43,6 @@ def get_return_type(code_header, begin):
     
 
 def extractor(method_lines):
-    # file = open('in', 'r')
-    # code_header = file.readline()
     code_header = method_lines[0]
     parameter, begin, end = get_parameters(code_header)  # begin and end of parameters
     if parameter is None:
