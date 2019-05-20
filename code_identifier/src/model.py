@@ -1,11 +1,12 @@
 import tensorflow as tf
-
-import PathContextReader
+import os
+import code_identifier.src.PathContextReader as PathContextReader
 import numpy as np
 import time
 import pickle
-from common import common, VocabType
+from code_identifier.src.common import common, VocabType
 
+tf.logging.set_verbosity(tf.logging.FATAL)
 
 class Model:
     topk = 10
@@ -32,7 +33,7 @@ class Model:
                 num_training_examples = pickle.load(file)
                 self.config.NUM_EXAMPLES = num_training_examples
                 print('Dictionaries loaded.')
-
+        
         if config.LOAD_PATH:
             self.load_model(sess=None)
         else:
@@ -54,10 +55,10 @@ class Model:
 
     def create_index_to_target_word_map(self):
         self.index_to_target_word_table = tf.contrib.lookup.HashTable(
-            tf.contrib.lookup.KeyValueTensorInitializer(list(self.index_to_target_word.keys()),
-                                                        list(self.index_to_target_word.values()),
-                                                        key_dtype=tf.int64, value_dtype=tf.string),
-            default_value=tf.constant(common.noSuchWord, dtype=tf.string))
+                tf.contrib.lookup.KeyValueTensorInitializer(list(self.index_to_target_word.keys()),
+                                                            list(self.index_to_target_word.values()),
+                                                            key_dtype=tf.int64, value_dtype=tf.string),
+                default_value=tf.constant(common.noSuchWord, dtype=tf.string))
 
     def close_session(self):
         self.sess.close()
@@ -140,8 +141,8 @@ class Model:
             self.load_model(self.sess)
             if self.config.RELEASE:
                 release_name = self.config.LOAD_PATH + '.release'
-                print('Releasing model, output model: %s' % release_name)
-                self.saver.save(self.sess, release_name)
+                print('Releasing model, output model: %s' % release_name )
+                self.saver.save(self.sess, release_name )
                 return None
 
         if self.eval_data_lines is None:
@@ -160,8 +161,7 @@ class Model:
 
             for batch in common.split_to_batches(self.eval_data_lines, self.config.TEST_BATCH_SIZE):
                 top_words, top_scores, original_names, code_vectors = self.sess.run(
-                    [self.eval_top_words_op, self.eval_top_values_op, self.eval_original_names_op,
-                     self.eval_code_vectors],
+                    [self.eval_top_words_op, self.eval_top_values_op, self.eval_original_names_op, self.eval_code_vectors],
                     feed_dict={self.eval_placeholder: batch})
                 top_words, original_names = common.binary_to_string_matrix(top_words), common.binary_to_string_matrix(
                     original_names)
@@ -181,14 +181,13 @@ class Model:
                 if total_prediction_batches % self.num_batches_to_log == 0:
                     elapsed = time.time() - start_time
                     # start_time = time.time()
-                    self.trace_evaluation(output_file, num_correct_predictions, total_predictions, elapsed,
-                                          len(self.eval_data_lines))
+                    self.trace_evaluation(output_file, num_correct_predictions, total_predictions, elapsed, len(self.eval_data_lines))
 
             print('Done testing, epoch reached')
             output_file.write(str(num_correct_predictions / total_predictions) + '\n')
         if self.config.EXPORT_CODE_VECTORS:
             code_vectors_file.close()
-
+        
         elapsed = int(time.time() - eval_start_time)
         precision, recall, f1 = self.calculate_results(true_positive, false_positive, false_negative)
         print("Evaluation time: %sH:%sM:%sS" % ((elapsed // 60 // 60), (elapsed // 60) % 60, elapsed % 60))
@@ -225,8 +224,7 @@ class Model:
     @staticmethod
     def trace_evaluation(output_file, correct_predictions, total_predictions, elapsed, total_examples):
         state_message = 'Evaluated %d/%d examples...' % (total_predictions, total_examples)
-        throughput_message = "Prediction throughput: %d samples/sec" % int(
-            total_predictions / (elapsed if elapsed > 0 else 1))
+        throughput_message = "Prediction throughput: %d samples/sec" % int(total_predictions / (elapsed if elapsed > 0 else 1))
         print(state_message)
         print(throughput_message)
 
@@ -273,8 +271,8 @@ class Model:
                                                                                                      uniform=True))
 
             code_vectors, _ = self.calculate_weighted_contexts(words_vocab, paths_vocab, attention_param,
-                                                               source_input, path_input, target_input,
-                                                               valid_mask)
+                                                                            source_input, path_input, target_input,
+                                                                            valid_mask)
 
             logits = tf.matmul(code_vectors, target_words_vocab, transpose_b=True)
             batch_size = tf.to_float(tf.shape(words_input)[0])
@@ -317,7 +315,7 @@ class Model:
 
         batched_embed = tf.reshape(flat_embed, shape=[-1, max_contexts, self.config.EMBEDDINGS_SIZE * 3])
         code_vectors = tf.reduce_sum(tf.multiply(batched_embed, attention_weights),
-                                     axis=1)  # (batch, dim * 3)
+                                                  axis=1)  # (batch, dim * 3)
 
         return code_vectors, attention_weights
 
@@ -341,12 +339,12 @@ class Model:
             words_input, source_input, path_input, target_input, valid_mask, source_string, path_string, path_target_string = input_tensors  # (batch, 1), (batch, max_contexts)
 
             code_vectors, attention_weights = self.calculate_weighted_contexts(words_vocab, paths_vocab,
-                                                                               attention_param,
-                                                                               source_input, path_input,
-                                                                               target_input,
-                                                                               valid_mask, True)
+                                                                                            attention_param,
+                                                                                            source_input, path_input,
+                                                                                            target_input,
+                                                                                            valid_mask, True)
 
-        scores = tf.matmul(code_vectors, target_words_vocab)  # (batch, target_word_vocab+1)
+        scores = tf.matmul(code_vectors, target_words_vocab) # (batch, target_word_vocab+1)
 
         topk_candidates = tf.nn.top_k(scores, k=tf.minimum(self.topk, self.target_word_vocab_size))
         top_indices = tf.to_int64(topk_candidates.indices)
@@ -429,7 +427,7 @@ class Model:
             self.saver.restore(sess, self.config.LOAD_PATH)
             print('Done')
         dictionaries_path = self.get_dictionaries_path(self.config.LOAD_PATH)
-        with open(dictionaries_path, 'rb') as file:
+        with open(dictionaries_path , 'rb') as file:
             print('Loading model dictionaries from: %s' % dictionaries_path)
             self.word_to_index = pickle.load(file)
             self.index_to_word = pickle.load(file)

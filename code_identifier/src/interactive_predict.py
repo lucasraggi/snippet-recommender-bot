@@ -1,5 +1,5 @@
-from common import common
-from extractor import Extractor
+from code_identifier.src.common import common
+from code_identifier.src.extractor import Extractor
 
 SHOW_TOP_CONTEXTS = 10
 MAX_PATH_LENGTH = 8
@@ -26,12 +26,11 @@ class InteractivePredictor:
     def predict(self):
         input_filename = 'Input.java'
         list_return = []
-        print('Starting interactive prediction...')
         predict_lines, hash_to_string_dict = self.path_extractor.extract_paths(input_filename)
         results, code_vectors = self.model.predict(predict_lines)
         prediction_results = common.parse_results(results, hash_to_string_dict, topk=SHOW_TOP_CONTEXTS)
         for i, method_prediction in enumerate(prediction_results):
-            print('Original name:\t' + method_prediction.original_name)
+            # print('Original name:\t' + method_prediction.original_name)
             list_return = method_prediction.predictions[0:3]
             print(list_return)
         return list_return

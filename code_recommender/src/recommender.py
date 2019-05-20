@@ -1,12 +1,14 @@
 from code_recommender.src.sqlconnector import MySqlOperator
 import json
 
+
 class UserMethod:
     def __init__(self, method_name, number_parameters, parameter_types, return_type):
         self.method_name = method_name
         self.number_parameters = number_parameters
         self.parameter_types = parameter_types
         self.return_type = return_type
+
 
 class RecommendationMethod:
     def __init__(self, method_name, code, number_parameters, parameter_types, return_type):
@@ -16,6 +18,7 @@ class RecommendationMethod:
         self.parameter_types = parameter_types
         self.return_type = return_type
         self.points = 0
+
 
 def rank_methods(user_method, recommendation_method_list):
     for method in recommendation_method_list:
@@ -31,11 +34,11 @@ def rank_methods(user_method, recommendation_method_list):
 
         # Parameter types points
         if len(user_method.parameter_types) > len(method.parameter_types):
-            bigger = user_method
+            bigger = user_method.parameter_types
             smaller = method.parameter_types
         else:
             bigger = method.parameter_types
-            smaller = user_method
+            smaller = user_method.parameter_types
         can_match = []
         match = 0
         for i in bigger:
@@ -56,6 +59,7 @@ def generate_methods_to_recommender(method_name):
         similar_methods.append(object)
     return similar_methods
 
+
 def recommender(method_name, number_parameters, parameter_types, return_type):
     user_method = UserMethod(method_name, number_parameters, parameter_types, return_type)
     recommendation_method_list = generate_methods_to_recommender(method_name)
@@ -63,8 +67,15 @@ def recommender(method_name, number_parameters, parameter_types, return_type):
     recommendation_method_list = rank_methods(user_method, recommendation_method_list)
     recommendation_method_list.sort(key=lambda x: x.points, reverse=True)
     dict_list = []
+    method_name_list = []
+    method_code_list = []
+    method_points_list = []
+    num_codes = len(recommendation_method_list)
     for i in recommendation_method_list:
-        method_dict = {'code': str(i.code), 'points': str(i.points)}
-        dict_list.append(method_dict)
-    return json.dumps(dict_list)
+        method_name_list.append(i.method_name)
+        method_code_list.append('teste')
+        method_points_list.append(i.points)
+    print(method_name_list)
+    method_dict = {'method_name': method_name_list, 'method_code': method_code_list, 'method_points': method_points_list, 'num_codes': num_codes}
+    return json.dumps(method_dict)
 

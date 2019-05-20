@@ -8,7 +8,7 @@ class Config:
     @staticmethod
     def get_default_config(args):
         config = Config()
-        config.NUM_EPOCHS = 30
+        config.NUM_EPOCHS = 20
         config.SAVE_EVERY_EPOCHS = 1
         config.BATCH_SIZE = 1024
         config.TEST_BATCH_SIZE = config.BATCH_SIZE

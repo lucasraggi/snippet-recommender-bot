@@ -1,6 +1,6 @@
 import random
 from argparse import ArgumentParser
-from src import common
+import common
 import pickle
 
 '''

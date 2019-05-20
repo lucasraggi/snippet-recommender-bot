@@ -1,12 +1,12 @@
-from common import Config, VocabType
-from argparse import ArgumentParser
-from interactive_predict import InteractivePredictor
-from model import Model
 import sys
+sys.path.append('../..')
+from code_identifier.src.common import Config, VocabType
+from argparse import ArgumentParser
+from code_identifier.src.interactive_predict import InteractivePredictor
+from code_identifier.src.model import Model
 
 
 def main(raw_args=None):
-    print(raw_args)
     parser = ArgumentParser()
     parser.add_argument("-d", "--data", dest="data_path",
                         help="path to preprocessed dataset", required=False)
@@ -36,7 +36,7 @@ def main(raw_args=None):
     config = Config.get_default_config(args)
 
     model = Model(config)
-    print('Created model')
+    # print('Created model')
     if config.TRAIN_PATH:
         model.train()
     if args.save_w2v is not None:
@@ -57,3 +57,6 @@ def main(raw_args=None):
         return list_return
     model.close_session()
 
+
+if __name__ == '__main__':
+    main()

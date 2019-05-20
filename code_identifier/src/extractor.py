@@ -1,5 +1,6 @@
 import subprocess
-
+import sys
+sys.path.append('../..')
 
 class Extractor:
     def __init__(self, config, jar_path, max_path_length, max_path_width):
