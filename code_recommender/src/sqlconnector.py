@@ -22,6 +22,7 @@ class MySqlOperator:
         try:
             self.mycursor.execute('CREATE TABLE IF NOT EXISTS methods ('
                                   'id int not null auto_increment,'
+                                  'class_name varchar(255),'
                                   'method_name varchar(255),'
                                   'code longtext, '
                                   'number_parameters int,'
@@ -31,10 +32,10 @@ class MySqlOperator:
         except mysql.connector.Error as err:
             print('ERROR in create table {}'.format(err))
 
-    def insert_table(self, method_name, code, number_parameters, parameter_types, return_type):
+    def insert_table(self, class_name, method_name, code, number_parameters, parameter_types, return_type):
         try:
-            self.mycursor.execute('INSERT INTO methods (method_name, code, number_parameters, parameters_types, return_type) '
-                                  'values(%s, %s, %s, %s, %s)',(method_name, code, number_parameters, parameter_types, return_type))
+            self.mycursor.execute('INSERT INTO methods (class_name, method_name, code, number_parameters, parameters_types, return_type) '
+                                  'values(%s, %s, %s, %s, %s, %s)',(class_name, method_name, code, number_parameters, parameter_types, return_type))
         except mysql.connector.Error as err:
             print("ERROR in insert table {}".format(err))
 

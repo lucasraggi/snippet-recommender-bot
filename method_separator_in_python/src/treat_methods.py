@@ -7,7 +7,6 @@ class TreatMethods:
                 and not self.is_constructor_method(tokens, class_name)\
                 and not self.is_main_method(tokens)\
                 and not self.is_interface_caller(tokens)\
-                and not self.is_test_method(tokens)\
                 and '(' in tokens:
             return True
         return False
@@ -17,9 +16,12 @@ class TreatMethods:
             return True
         return False
 
-    def is_test_method(self, tokens):
-        if 'test' in tokens:
-            return True
+    def is_bad_method_name(self, tokens):
+        list_names = ['test', 'sort', 'run', 'find', 'print', 'search']
+
+        for i in list_names:
+            if i in tokens:
+                return True
         return False
 
     def is_main_method(self, tokens):

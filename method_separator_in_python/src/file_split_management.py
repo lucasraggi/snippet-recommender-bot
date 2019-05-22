@@ -1,8 +1,8 @@
 from nltk.tokenize import word_tokenize
-from code_recommender.src.recommender import RecommendationMethod
-from method_separator_in_python.src import extract_code_information as extract
-from method_separator_in_python.src.treat_methods import TreatMethods
-from method_separator_in_python.src.treat_class import TreatClass
+from .extract_code_information import extractor
+from .treat_methods import TreatMethods
+from .treat_class import TreatClass
+from .java_method import JavaMethod
 
 class Split:
     def __init__(self):
@@ -41,7 +41,10 @@ class Split:
     def split_methods(self, tokens):
         for i in range(0, len(tokens)):
             if self.treat_methods.check_if_is_usable_method(tokens, self.class_name):
-                self.method_name = self.treat_methods.define_method_name(tokens)
+                if self.treat_methods.is_bad_method_name(tokens):
+                    self.method_name = self.class_name
+                else:
+                    self.method_name = self.treat_methods.define_method_name(tokens)
                 self.code_lines.append(self.line)
                 self.stack.append('{')
                 break
@@ -56,12 +59,12 @@ class Split:
                         self.create_new_method_object_and_clear_list()
 
     def create_new_method_object_and_clear_list(self):
-        datas = extract.extractor(self.code_lines.copy())
+        datas = extractor(self.code_lines.copy())
         code = ' '.join(map(str, self.code_lines.copy()))
         num_param = datas[0]
         param_types = ' '.join(map(str, datas[1]))
         return_type = datas[2]
-        new_method = RecommendationMethod(self.method_name, code, num_param, param_types, return_type)
+        new_method = JavaMethod(self.class_name, self.method_name, code, num_param, param_types, return_type)
         self.all_methods.append(new_method)
         self.code_lines.clear()
 

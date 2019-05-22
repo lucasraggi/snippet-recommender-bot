@@ -29,7 +29,7 @@ class TreatDirectory:
     def treat_methods_to_insert_database(self):
         mysql = MySqlOperator()
         for i in self.receive_objects:
-            mysql.insert_table(i.method_name, i.code, i.number_parameters, i.parameter_types, i.return_type)
+            mysql.insert_table(i.class_name, i.method_name, i.code, i.number_parameters, i.parameter_types, i.return_type)
         mysql.commit_table()
 
     def is_java_file(self, file_name):
