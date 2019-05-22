@@ -40,6 +40,8 @@ def get_method_lines(data):
 app = Flask(__name__)
 
 
+# Get json in the format {"_class": ..., "method": ..., "code": ...}
+# Returns json in the format {'method_name': ..., 'method_code': ..., 'method_points': ..., 'num_codes': ...}
 @app.route("/plugin", methods=['POST'])
 def api():
     # json_string = {"_class":"class_test","method":"bubbleSort","code":"public void bubbleSort(int arr[]) {\n         int n = arr.length;\n         for (int i = 0; i < n-1; i++)\n             for (int j = 0; j < n-i-1; j++)\n                 if (arr[j] > arr[j+1])\n                 {\n                     // swap temp and arr[i]\n                     int temp = arr[j];\n                     arr[j] = arr[j+1];\n                     arr[j+1] = temp;\n                 }\n     }\n', '1', 'int', 'void'"}
@@ -56,12 +58,13 @@ def api():
     method_name = list_return[0]['name']
     method_name = ''.join(method_name)
     number_parameters, types_parameters, return_type = extractor(method_lines)
-    # method_name = 'bubbleSort'
     json_dict = recommender(method_name, number_parameters, types_parameters, return_type)
     response = jsonify(json_dict)
     return response
 
 
+# Get string with the incomplete code snippet
+# Returns string with the best fitting algorithm code
 @app.route("/code", methods=['POST'])
 def api_method():
     # json_string = {"_class":"class_test","method":"bubbleSort","code":"public void bubbleSort(int arr[]) {\n         int n = arr.length;\n    "}
@@ -76,7 +79,6 @@ def api_method():
     method_name = list_return[0]['name']
     method_name = ''.join(method_name)
     number_parameters, types_parameters, return_type = extractor(method_lines)
-    # method_name = 'bubbleSort'
     json_dict = recommender(method_name, number_parameters, types_parameters, return_type)
     method_code = json_dict['method_code']
     method_code = method_code[0]
