@@ -49,7 +49,8 @@ def api():
     data_dump = json.dumps(json_string)
     data = json.loads(data_dump)
     method_lines = get_method_lines(data)
-    print(method_lines)
+    # for i in method_lines:
+    #     print(i, end='')
     f = open('Input.java', 'w')
     for i in method_lines:
         f.write(i)
@@ -78,6 +79,7 @@ def api_method():
     list_return = main(['--load', '../../models/incomplete_dataset2/saved_model_iter30', '--predict'])
     method_name = list_return[0]['name']
     method_name = ''.join(method_name)
+    print(method_name)
     number_parameters, types_parameters, return_type = extractor(method_lines)
     json_dict = recommender(method_name, number_parameters, types_parameters, return_type)
     method_code = json_dict['method_code']

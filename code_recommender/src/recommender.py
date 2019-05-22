@@ -73,7 +73,7 @@ def recommender(method_name, number_parameters, parameter_types, return_type):
     num_codes = len(recommendation_method_list)
     for i in recommendation_method_list:
         method_name_list.append(i.method_name)
-        method_code_list.append('teste')
+        method_code_list.append(i.code)
         method_points_list.append(i.points)
     print(method_name_list)
     method_dict = {'method_name': method_name_list, 'method_code': method_code_list, 'method_points': method_points_list, 'num_codes': num_codes}
