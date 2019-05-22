@@ -77,5 +77,5 @@ def recommender(method_name, number_parameters, parameter_types, return_type):
         method_points_list.append(i.points)
     print(method_name_list)
     method_dict = {'method_name': method_name_list, 'method_code': method_code_list, 'method_points': method_points_list, 'num_codes': num_codes}
-    return json.dumps(method_dict)
+    return method_dict
 

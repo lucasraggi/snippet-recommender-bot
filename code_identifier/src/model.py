@@ -8,6 +8,7 @@ from code_identifier.src.common import common, VocabType
 
 tf.logging.set_verbosity(tf.logging.FATAL)
 
+
 class Model:
     topk = 10
     num_batches_to_log = 100

@@ -7,6 +7,7 @@ import json
 import os
 from flask import Flask
 from flask import request
+from flask import jsonify
 
 
 def get_begin_end(code_lines, i):
@@ -46,6 +47,7 @@ def api():
     data_dump = json.dumps(json_string)
     data = json.loads(data_dump)
     method_lines = get_method_lines(data)
+    print(method_lines)
     f = open('Input.java', 'w')
     for i in method_lines:
         f.write(i)
@@ -55,16 +57,17 @@ def api():
     method_name = ''.join(method_name)
     number_parameters, types_parameters, return_type = extractor(method_lines)
     # method_name = 'bubbleSort'
-    json_list = recommender(method_name, number_parameters, types_parameters, return_type)
-    print(json_list)
-    return str(json_list)
+    json_dict = recommender(method_name, number_parameters, types_parameters, return_type)
+    response = jsonify(json_dict)
+    return response
 
 
 @app.route("/code", methods=['POST'])
 def api_method():
     # json_string = {"_class":"class_test","method":"bubbleSort","code":"public void bubbleSort(int arr[]) {\n         int n = arr.length;\n    "}
     method_lines = request.get_data()
-    
+    method_lines = str(method_lines.decode('utf-8'))
+    method_lines = method_lines.splitlines(True)
     f = open('Input.java', 'w')
     for i in method_lines:
         f.write(i)
@@ -74,20 +77,20 @@ def api_method():
     method_name = ''.join(method_name)
     number_parameters, types_parameters, return_type = extractor(method_lines)
     # method_name = 'bubbleSort'
-    json_list = recommender(method_name, number_parameters, types_parameters, return_type)
-    print(json_list)
-    return str(json_list)
+    json_dict = recommender(method_name, number_parameters, types_parameters, return_type)
+    method_code = json_dict['method_code']
+    method_code = method_code[0]
+    response = jsonify(method_code)
+    print(response)
+    return response
 
 
 @app.route("/test", methods=['POST'])
 def api_test():
     print(request.is_json)
     content = request.get_json()
-    print(content)
-    return str(content)
-
-
-# api()
+    response = jsonify(content)
+    return response
 
 
 if __name__ == "__main__":
