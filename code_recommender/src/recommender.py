@@ -66,7 +66,6 @@ def recommender(method_name, number_parameters, parameter_types, return_type):
 
     recommendation_method_list = rank_methods(user_method, recommendation_method_list)
     recommendation_method_list.sort(key=lambda x: x.points, reverse=True)
-    dict_list = []
     method_name_list = []
     method_code_list = []
     method_points_list = []
