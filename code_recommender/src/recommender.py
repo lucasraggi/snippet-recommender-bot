@@ -9,7 +9,6 @@ class UserMethod:
         self.parameter_types = parameter_types
         self.return_type = return_type
 
-
 class RecommendationMethod:
     def __init__(self, method_name, code, number_parameters, parameter_types, return_type):
         self.method_name = method_name
@@ -18,7 +17,6 @@ class RecommendationMethod:
         self.parameter_types = parameter_types
         self.return_type = return_type
         self.points = 0
-
 
 def rank_methods(user_method, recommendation_method_list):
     for method in recommendation_method_list:
@@ -55,10 +53,9 @@ def generate_methods_to_recommender(method_name):
     similar_methods = list()
     get = MySqlOperator().select_method(method_name)
     for data in get:
-        object = RecommendationMethod(data[1], data[2], data[3], data[4], data[5])
+        object = RecommendationMethod(data[2], data[3], data[4], data[5], data[6])
         similar_methods.append(object)
     return similar_methods
-
 
 def recommender(method_name, number_parameters, parameter_types, return_type):
     user_method = UserMethod(method_name, number_parameters, parameter_types, return_type)
