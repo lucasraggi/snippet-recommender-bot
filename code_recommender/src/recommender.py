@@ -52,6 +52,7 @@ def rank_methods(user_method, recommendation_method_list):
 def generate_methods_to_recommender(method_name):
     similar_methods = list()
     get = MySqlOperator().select_method(method_name)
+    print(len(get))
     for data in get:
         # print(data[0])  # num
         # print(data[1])  # name
@@ -59,7 +60,7 @@ def generate_methods_to_recommender(method_name):
         # print(data[3])  # number of parans
         # print(data[4]) # list of params
         # print(data[5]) # return type
-        object = RecommendationMethod(data[1], data[2], data[3], data[4], data[5])
+        object = RecommendationMethod(data[2], data[3], data[4], data[5], data[6])
         similar_methods.append(object)
     return similar_methods
 
