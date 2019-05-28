@@ -321,7 +321,8 @@ class Model:
         return code_vectors, attention_weights
 
     def build_test_graph(self, input_tensors, normalize_scores=False):
-        with tf.variable_scope('model', reuse=self.get_should_reuse_variables()):
+        print(tf.AUTO_REUSE)
+        with tf.variable_scope('model', reuse=tf.AUTO_REUSE):
             words_vocab = tf.get_variable('WORDS_VOCAB', shape=(self.word_vocab_size + 1, self.config.EMBEDDINGS_SIZE),
                                           dtype=tf.float32, trainable=False)
             target_words_vocab = tf.get_variable('TARGET_WORDS_VOCAB',
@@ -471,6 +472,8 @@ class Model:
 
     def get_should_reuse_variables(self):
         if self.config.TRAIN_PATH:
+            print(" #############33        TRUE ####################")
             return True
         else:
+            print(" #############33        NONE ####################")
             return None
