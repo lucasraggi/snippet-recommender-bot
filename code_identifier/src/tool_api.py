@@ -111,7 +111,7 @@ def get_app():
         json_dict = recommender(method_name, number_parameters, types_parameters, return_type)
         method_code = json_dict['method_code']
         print(method_code)
-        method_code = method_code[0]
+        # method_code = method_code[0]
         response = jsonify(method_code)
         print(response)
         # global to_reload

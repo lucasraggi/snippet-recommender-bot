@@ -19,7 +19,9 @@ class RecommendationMethod:
         self.points = 0
 
 def rank_methods(user_method, recommendation_method_list):
+
     for method in recommendation_method_list:
+
         # Return types points
         return_type_points = 0
         if user_method.return_type == method.return_type:
@@ -46,6 +48,7 @@ def rank_methods(user_method, recommendation_method_list):
                     can_match[j] = False
         parameter_type_points = match/len(bigger) * 2
         method.points = return_type_points + number_parameters_points + parameter_type_points
+        print("######## CODE ###########")
     return recommendation_method_list
 
 

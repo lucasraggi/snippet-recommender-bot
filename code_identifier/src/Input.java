@@ -1,12 +1,19 @@
-    public void bubbleSort(float arr[]) {
-         int n = arr.length;
-         for (int i = 0; i < n-1; i++)
-             for (int j = 0; j < n-i-1; j++)
-                 if (arr[j] > arr[j+1])
-                 {
-                     // swap temp and arr[i]
-                     float temp = arr[j];
-                     arr[j] = arr[j+1];
-                     arr[j+1] = temp;
-                 }
-     }
+int binarySearch(int arr[], int l, int r, int x) 
+    { 
+        if (r>=l) 
+        { 
+            int mid = l + (r - l)/2; 
+   
+            // If the element is present at the  
+            // middle itself 
+            if (arr[mid] == x) 
+               return mid; 
+   
+   
+            return binarySearch(arr, mid+1, r, x); 
+        } 
+   
+        // We reach here when element is not present 
+        //  in array 
+        return -1; 
+    } 
