@@ -68,7 +68,7 @@ def get_app():
     # Get json in the format {"_class": ..., "method": ..., "code": ...}
     # Returns json in the format {'method_name': ..., 'method_code': ..., 'method_points': ..., 'num_codes': ...}
     @app.route("/plugin", methods=['POST'])
-    def api():
+    def api_plugin():
         # json_string = {"_class":"class_test","method":"bubbleSort","code":"public void bubbleSort(int arr[]) {\n         int n = arr.length;\n         for (int i = 0; i < n-1; i++)\n             for (int j = 0; j < n-i-1; j++)\n                 if (arr[j] > arr[j+1])\n                 {\n                     // swap temp and arr[i]\n                     int temp = arr[j];\n                     arr[j] = arr[j+1];\n                     arr[j+1] = temp;\n                 }\n     }\n', '1', 'int', 'void'"}
         json_string = request.get_json()
         data_dump = json.dumps(json_string)
