@@ -111,12 +111,26 @@ def get_app():
         json_dict = recommender(method_name, number_parameters, types_parameters, return_type)
         method_code = json_dict['method_code']
         print(method_code)
-        # method_code = method_code[0]
+        if len(method_code) > 0:
+            method_code = method_code[0]
         response = jsonify(method_code)
         print(response)
-        # global to_reload
-        # to_reload = True
-        # application = AppReloader(get_app)
+        return response
+
+        # Get string with the incomplete code snippet
+        # Returns string with the best fitting algorithm code
+    @app.route("/code_name", methods=['POST'])
+    def api_name():
+        alg_name = request.get_data()
+        alg_name = str(alg_name.decode('utf-8'))
+        number_parameters, types_parameters, return_type = 0, [], ''
+        json_dict = recommender(alg_name, number_parameters, types_parameters, return_type)
+        method_code = json_dict['method_code']
+        print(method_code)
+        if len(method_code) > 0:
+            method_code = method_code[0]
+        response = jsonify(method_code)
+        print(response)
         return response
 
     @app.route("/test", methods=['POST'])

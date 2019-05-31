@@ -9,6 +9,7 @@ class UserMethod:
         self.parameter_types = parameter_types
         self.return_type = return_type
 
+
 class RecommendationMethod:
     def __init__(self, method_name, code, number_parameters, parameter_types, return_type):
         self.method_name = method_name
@@ -18,8 +19,8 @@ class RecommendationMethod:
         self.return_type = return_type
         self.points = 0
 
-def rank_methods(user_method, recommendation_method_list):
 
+def rank_methods(user_method, recommendation_method_list):
     for method in recommendation_method_list:
 
         # Return types points
@@ -30,7 +31,12 @@ def rank_methods(user_method, recommendation_method_list):
         if user_method.number_parameters >= method.number_parameters:
             number_parameters_points = user_method.number_parameters / method.number_parameters
         else:
-            number_parameters_points = method.number_parameters / user_method.number_parameters
+            if user_method.number_parameters == 0 and method.number_parameters == 0:
+                number_parameters_points = 1
+            elif user_method.number_parameters == 0 and method.number_parameters != 0:
+                number_parameters_points = 1
+            else:
+                number_parameters_points = method.number_parameters / user_method.number_parameters
 
         # Parameter types points
         if len(user_method.parameter_types) > len(method.parameter_types):
@@ -67,10 +73,10 @@ def generate_methods_to_recommender(method_name):
         similar_methods.append(object)
     return similar_methods
 
+
 def recommender(method_name, number_parameters, parameter_types, return_type):
     user_method = UserMethod(method_name, number_parameters, parameter_types, return_type)
     recommendation_method_list = generate_methods_to_recommender(method_name)
-
     recommendation_method_list = rank_methods(user_method, recommendation_method_list)
     recommendation_method_list.sort(key=lambda x: x.points, reverse=True)
     method_name_list = []
