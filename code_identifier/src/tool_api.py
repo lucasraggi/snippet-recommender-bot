@@ -117,10 +117,42 @@ def get_app():
         print(response)
         return response
 
+    @app.route("/identifier", methods=['POST'])
+    def api_identifier():
+        # json_string = {"_class":"class_test","method":"bubbleSort","code":"public void bubbleSort(int arr[]) {\n         int n = arr.length;\n    "}
+        method_lines = request.get_data()
+        method_lines = str(method_lines.decode('utf-8'))
+        method_lines = method_lines.splitlines(True)
+        f = open('Input.java', 'w')
+        for i in method_lines:
+            f.write(i)
+        f.close()
+        list_return = main(['--load', '../../models/incomplete_dataset2/saved_model_iter30', '--predict'])
+        method_name = list_return[0]['name']
+        method_name = ''.join(method_name)
+        response = jsonify(method_name)
+        print(response)
+        return response
+
         # Get string with the incomplete code snippet
         # Returns string with the best fitting algorithm code
     @app.route("/code_name", methods=['POST'])
     def api_name():
+        json_string = request.get_json()
+        data_dump = json.dumps(json_string)
+        data = json.loads(data_dump)
+        alg_name = data['method']
+        alg_name = str(alg_name.decode('utf-8'))
+        number_parameters, types_parameters, return_type = 0, [], ''
+        json_dict = recommender(alg_name, number_parameters, types_parameters, return_type)
+        method_code = json_dict['method_code']
+        print(method_code)
+        response = jsonify(json_dict)
+        print(response)
+        return response
+
+    @app.route("/code_name2", methods=['POST'])
+    def api_name2():
         alg_name = request.get_data()
         alg_name = str(alg_name.decode('utf-8'))
         number_parameters, types_parameters, return_type = 0, [], ''

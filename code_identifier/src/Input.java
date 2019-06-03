@@ -1,9 +1,11 @@
-int binarySearch(int arr[], int l, int r, int x) 
-    { 
-        if (r>=l) 
-        { 
-            int mid = l + (r - l)/2; 
-            if (arr[mid] == x) 
-               return mid;
-        }
-    } 
+public static void insertionSort(int[] vetor) {
+    int j;
+    int key;
+    int i;
+    
+    for (j = 1; j < vetor.length; j++)
+    {
+      key = vetor[j];
+
+    }
+}
