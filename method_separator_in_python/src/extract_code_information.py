@@ -1,6 +1,3 @@
-# extract number of parameters, type of parameters
-
-
 def get_parameters(code_header):
     begin = -1
     end = -1
@@ -40,7 +37,7 @@ def get_return_type(code_header, begin):
     header_without_parameters = header_without_parameters.split(' ')
     return_type = header_without_parameters[-2]
     return return_type
-    
+
 
 def extractor(method_lines):
     code_header = method_lines[0]
@@ -53,5 +50,3 @@ def extractor(method_lines):
 
     return number_parameters, types_parameters, return_type
 
-
-# extractor()

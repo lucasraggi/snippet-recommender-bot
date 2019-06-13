@@ -6,7 +6,6 @@ from code_recommender.src.sqlconnector import MySqlOperator
 class TreatDirectory:
     def __init__(self, directory):
         self.directory = directory
-        self.cout = 0
         self.receive_objects = list()
 
     def open_and_working_in_directory(self):
@@ -16,15 +15,12 @@ class TreatDirectory:
     def split_java_files_and_add_to_sql(self, directory):
         split = Split()
         for file in os.listdir(directory):
-            try:
-                if os.path.isfile(directory + '/' + file):
-                    if self.is_java_file(file):
-                        self.receive_objects = split.work_in_file(directory + '/' + file)
-                        self.treat_methods_to_insert_database()
-                else:
-                    self.split_java_files_and_add_to_sql(directory + '/' + file)
-            except:
-                print(directory + '/' + file)
+            if os.path.isfile(directory + '/' + file):
+                if self.is_java_file(file):
+                    self.receive_objects = split.work_in_file(directory + '/' + file)
+                    self.treat_methods_to_insert_database()
+            else:
+                self.split_java_files_and_add_to_sql(directory + '/' + file)
 
     def treat_methods_to_insert_database(self):
         mysql = MySqlOperator()
