@@ -1,4 +1,4 @@
-from method_separator_in_python.src.treat_directory import TreatDirectory
+from util.method_separator_in_python.src import TreatDirectory
 
 def main():
     work = TreatDirectory('/home/arthur/Bot recommender/Dataset')

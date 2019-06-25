@@ -1,6 +1,6 @@
 import os
 import re
-from method_separator_in_python.src.file_split_management import Split
+from util.method_separator_in_python.src.file_split_management import Split
 from code_recommender.src.sqlconnector import MySqlOperator
 
 class TreatDirectory:

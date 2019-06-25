@@ -1,6 +1,6 @@
 from nltk.tokenize import word_tokenize
-from method_separator_in_python.src.treat_methods import TreatMethods
-from method_separator_in_python.src.extract_code_information import extractor
+from util.method_separator_in_python.src.treat_methods import TreatMethods
+from util.method_separator_in_python.src.extract_code_information import extractor
 
 class JavaMethod:
     def __init__(self, class_name, method_name, code, number_parameters, parameter_types, return_type):
