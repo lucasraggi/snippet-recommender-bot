@@ -142,7 +142,7 @@ class Model:
             self.load_model(self.sess)
             if self.config.RELEASE:
                 release_name = self.config.LOAD_PATH + '.release'
-                print('Releasing model, output model: %s' % release_name )
+                print('Releasing models, output models: %s' % release_name )
                 self.saver.save(self.sess, release_name )
                 return None
 
@@ -250,7 +250,7 @@ class Model:
     def build_training_graph(self, input_tensors):
         words_input, source_input, path_input, target_input, valid_mask = input_tensors  # (batch, 1),   (batch, max_contexts)
 
-        with tf.variable_scope('model'):
+        with tf.variable_scope('models'):
             words_vocab = tf.get_variable('WORDS_VOCAB', shape=(self.word_vocab_size + 1, self.config.EMBEDDINGS_SIZE),
                                           dtype=tf.float32,
                                           initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0,
@@ -322,7 +322,7 @@ class Model:
 
     def build_test_graph(self, input_tensors, normalize_scores=False):
         print(tf.AUTO_REUSE)
-        with tf.variable_scope('model', reuse=tf.AUTO_REUSE):
+        with tf.variable_scope('models', reuse=tf.AUTO_REUSE):
             words_vocab = tf.get_variable('WORDS_VOCAB', shape=(self.word_vocab_size + 1, self.config.EMBEDDINGS_SIZE),
                                           dtype=tf.float32, trainable=False)
             target_words_vocab = tf.get_variable('TARGET_WORDS_VOCAB',
@@ -425,12 +425,12 @@ class Model:
 
     def load_model(self, sess):
         if not sess is None:
-            print('Loading model weights from: ' + self.config.LOAD_PATH)
+            print('Loading models weights from: ' + self.config.LOAD_PATH)
             self.saver.restore(sess, self.config.LOAD_PATH)
             print('Done')
         dictionaries_path = self.get_dictionaries_path(self.config.LOAD_PATH)
         with open(dictionaries_path , 'rb') as file:
-            print('Loading model dictionaries from: %s' % dictionaries_path)
+            print('Loading models dictionaries from: %s' % dictionaries_path)
             self.word_to_index = pickle.load(file)
             self.index_to_word = pickle.load(file)
             self.word_vocab_size = pickle.load(file)
@@ -445,7 +445,7 @@ class Model:
             print('Done')
 
     def save_word2vec_format(self, dest, source):
-        with tf.variable_scope('model', reuse=None):
+        with tf.variable_scope('models', reuse=None):
             if source is VocabType.Token:
                 vocab_size = self.word_vocab_size
                 embedding_size = self.config.EMBEDDINGS_SIZE

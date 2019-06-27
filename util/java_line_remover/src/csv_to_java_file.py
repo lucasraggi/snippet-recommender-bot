@@ -4,7 +4,7 @@ import os
 
 # transform csv methods into java files for each method
 def main():
-    methods_df = pd.read_csv('../results_variances.csv')
+    methods_df = pd.read_csv('../result.csv')
     directory_path = '../java_files'
     os.makedirs(directory_path, exist_ok=True)
     os.chdir(directory_path)  # setting working directory to path

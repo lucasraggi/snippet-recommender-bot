@@ -29,14 +29,14 @@ def main(raw_args=None):
     parser.add_argument('--export_code_vectors', action='store_true', required=False,
                         help="export code vectors for the given examples")
     parser.add_argument('--release', action='store_true',
-                        help='if specified and loading a trained model, release the loaded model for a lower model '
+                        help='if specified and loading a trained models, release the loaded models for a lower models '
                              'size.')
     parser.add_argument('--predict', action='store_true')
     args = parser.parse_args(raw_args)
     config = Config.get_default_config(args)
 
     model = Model(config)
-    # print('Created model')
+    # print('Created models')
     if config.TRAIN_PATH:
         model.train()
     if args.save_w2v is not None:

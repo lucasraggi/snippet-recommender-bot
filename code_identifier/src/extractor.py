@@ -41,7 +41,7 @@ class Extractor:
     @staticmethod
     def java_string_hashcode(s):
         """
-        Imitating Java's String#hashCode, because the model is trained on hashed paths but we wish to
+        Imitating Java's String#hashCode, because the models is trained on hashed paths but we wish to
         Present the path attention on un-hashed paths.
         """
         h = 0
