@@ -1,12 +1,10 @@
 import tensorflow as tf
-import os
-import code_identifier.src.PathContextReader as PathContextReader
+
+import PathContextReader
 import numpy as np
 import time
 import pickle
-from code_identifier.src.common import common, VocabType
-
-tf.logging.set_verbosity(tf.logging.FATAL)
+from common import common, VocabType
 
 
 class Model:
@@ -34,7 +32,7 @@ class Model:
                 num_training_examples = pickle.load(file)
                 self.config.NUM_EXAMPLES = num_training_examples
                 print('Dictionaries loaded.')
-        
+
         if config.LOAD_PATH:
             self.load_model(sess=None)
         else:
@@ -142,7 +140,7 @@ class Model:
             self.load_model(self.sess)
             if self.config.RELEASE:
                 release_name = self.config.LOAD_PATH + '.release'
-                print('Releasing models, output models: %s' % release_name )
+                print('Releasing model, output model: %s' % release_name )
                 self.saver.save(self.sess, release_name )
                 return None
 
@@ -188,7 +186,7 @@ class Model:
             output_file.write(str(num_correct_predictions / total_predictions) + '\n')
         if self.config.EXPORT_CODE_VECTORS:
             code_vectors_file.close()
-        
+
         elapsed = int(time.time() - eval_start_time)
         precision, recall, f1 = self.calculate_results(true_positive, false_positive, false_negative)
         print("Evaluation time: %sH:%sM:%sS" % ((elapsed // 60 // 60), (elapsed // 60) % 60, elapsed % 60))
@@ -250,7 +248,7 @@ class Model:
     def build_training_graph(self, input_tensors):
         words_input, source_input, path_input, target_input, valid_mask = input_tensors  # (batch, 1),   (batch, max_contexts)
 
-        with tf.variable_scope('models'):
+        with tf.variable_scope('model'):
             words_vocab = tf.get_variable('WORDS_VOCAB', shape=(self.word_vocab_size + 1, self.config.EMBEDDINGS_SIZE),
                                           dtype=tf.float32,
                                           initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0,
@@ -321,8 +319,7 @@ class Model:
         return code_vectors, attention_weights
 
     def build_test_graph(self, input_tensors, normalize_scores=False):
-        print(tf.AUTO_REUSE)
-        with tf.variable_scope('models', reuse=tf.AUTO_REUSE):
+        with tf.variable_scope('model', reuse=tf.AUTO_REUSE):
             words_vocab = tf.get_variable('WORDS_VOCAB', shape=(self.word_vocab_size + 1, self.config.EMBEDDINGS_SIZE),
                                           dtype=tf.float32, trainable=False)
             target_words_vocab = tf.get_variable('TARGET_WORDS_VOCAB',
@@ -425,12 +422,12 @@ class Model:
 
     def load_model(self, sess):
         if not sess is None:
-            print('Loading models weights from: ' + self.config.LOAD_PATH)
+            print('Loading model weights from: ' + self.config.LOAD_PATH)
             self.saver.restore(sess, self.config.LOAD_PATH)
             print('Done')
         dictionaries_path = self.get_dictionaries_path(self.config.LOAD_PATH)
         with open(dictionaries_path , 'rb') as file:
-            print('Loading models dictionaries from: %s' % dictionaries_path)
+            print('Loading model dictionaries from: %s' % dictionaries_path)
             self.word_to_index = pickle.load(file)
             self.index_to_word = pickle.load(file)
             self.word_vocab_size = pickle.load(file)
@@ -445,7 +442,7 @@ class Model:
             print('Done')
 
     def save_word2vec_format(self, dest, source):
-        with tf.variable_scope('models', reuse=None):
+        with tf.variable_scope('model', reuse=None):
             if source is VocabType.Token:
                 vocab_size = self.word_vocab_size
                 embedding_size = self.config.EMBEDDINGS_SIZE
@@ -472,8 +469,6 @@ class Model:
 
     def get_should_reuse_variables(self):
         if self.config.TRAIN_PATH:
-            print(" #############33        TRUE ####################")
             return True
         else:
-            print(" #############33        NONE ####################")
             return None
