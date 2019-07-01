@@ -1,9 +1,9 @@
 # Code2Algo: Snippet Recommender Bot
 
 ## Code Identifier
-*Identifies the name of the algorithm given the code, even if the code is incomplete 
+Identifies the name of the algorithm given the code, even if the code is incomplete 
 ## Code Recommender
-*Given the algorithm name and the incomplete code it searches in pre-selected projects, the algorithm function that best fits the incomplete code given
+Given the algorithm name and the incomplete code it searches in pre-selected projects, the algorithm function that best fits the incomplete code given
 ## Recommender Database
 Some links from repositories that have been extracted methods to compose our database used for recommendation:
 
