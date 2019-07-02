@@ -116,6 +116,8 @@ def get_app():
         print(response)
         return response
 
+    # Get string with the incomplete code snippet
+    # Returns string with the best fitting algorithm name
     @app.route("/identifier", methods=['POST'])
     def api_identifier():
         # json_string = {"_class":"class_test","method":"bubbleSort","code":"public void bubbleSort(int arr[]) {\n         int n = arr.length;\n    "}
@@ -133,7 +135,7 @@ def get_app():
         print(response)
         return response
 
-        # Get string with the incomplete code snippet
+        # Get string with the algorithm name
         # Returns string with the best fitting algorithm code
     @app.route("/code_name", methods=['POST'])
     def api_name():
