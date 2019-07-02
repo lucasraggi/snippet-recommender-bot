@@ -172,6 +172,8 @@ class Model:
                 true_positive, false_positive, false_negative = self.update_per_subtoken_statistics(
                     zip(original_names, top_words),
                     true_positive, false_positive, false_negative)
+                print('original_names: ', original_names)
+                print('top_words: ', top_words)
 
                 total_predictions += len(original_names)
                 total_prediction_batches += 1
