@@ -1,7 +1,15 @@
 # Code2Algo: Snippet Recommender Bot
 
-## Code Identifier
+## Code Identifier (Code2vec)
 Identifies the name of the algorithm given the code, even if the code is incomplete
+#### Preprocess files
+> source preprocess.sh
+
+#### Train Model
+> source train.sh
+
+#### Evaluate Trained Model
+> python3 code2vec.py --load models/java14_model/saved_model_iter8 --test data/my_dataset/my_dataset.test.c2v
 
 ## Code Recommender
 Given the algorithm name and the incomplete code it searches in pre-selected projects, the algorithm function that best fits the incomplete code given
