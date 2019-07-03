@@ -1,19 +1,5 @@
 # Code2Algo: Snippet Recommender Bot
 
-## Code Identifier (Code2vec)
-Identifies the name of the algorithm given the code, even if the code is incomplete
-#### Preprocess files
-> source preprocess.sh
-
-#### Train Model
-> source train.sh
-
-#### Evaluate Trained Model
-> python3 code2vec.py --load models/java14_model/saved_model_iter8 --test data/my_dataset/my_dataset.test.c2v
-
-## Code Recommender
-Given the algorithm name and the incomplete code it searches in pre-selected projects, the algorithm function that best fits the incomplete code given
-
 ## API
 <center style="padding: 40px"><img width="70%" src="https://github.com/lucasraggi89/snippet-recommender-bot/blob/master/images/architecture.png" /></center>
 
@@ -36,6 +22,20 @@ where "_class" is the class name and "method" is the method name
 #### Route: /code_name Type: POST
 * Get string with the algorithm name
 * Returns string with the best fitting algorithm code
+
+## Code Identifier (Code2vec)
+Identifies the name of the algorithm given the code, even if the code is incomplete
+#### Preprocess files
+> source preprocess.sh
+
+#### Train Model
+> source train.sh
+
+#### Evaluate Trained Model
+> python3 code2vec.py --load models/java14_model/saved_model_iter8 --test data/my_dataset/my_dataset.test.c2v
+
+## Code Recommender
+Given the algorithm name and the incomplete code it searches in pre-selected projects, the algorithm function that best fits the incomplete code given
 
 ## Recommender Database
 Some links from repositories that have been extracted methods to compose our database used for recommendation:
