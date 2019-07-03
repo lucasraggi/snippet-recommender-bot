@@ -1,5 +1,6 @@
 import tensorflow as tf
-
+from algorithm_evaluate import algorithm
+from algorithm_evaluate import update_algorithm_dict
 import PathContextReader
 import numpy as np
 import time
@@ -156,6 +157,7 @@ class Model:
             total_predictions = 0
             total_prediction_batches = 0
             true_positive, false_positive, false_negative = 0, 0, 0
+            algorithm_dict = {}
             start_time = time.time()
 
             for batch in common.split_to_batches(self.eval_data_lines, self.config.TEST_BATCH_SIZE):
@@ -172,9 +174,10 @@ class Model:
                 true_positive, false_positive, false_negative = self.update_per_subtoken_statistics(
                     zip(original_names, top_words),
                     true_positive, false_positive, false_negative)
-                print('original_names: ', original_names)
-                print('top_words: ', top_words)
-
+                algorithm_dict = update_algorithm_dict(zip(original_names, top_words), algorithm_dict)
+                # print('original_names: ', original_names)
+                # print('top_words: ', top_words)
+                # print('')
                 total_predictions += len(original_names)
                 total_prediction_batches += 1
                 if self.config.EXPORT_CODE_VECTORS:
@@ -183,7 +186,10 @@ class Model:
                     elapsed = time.time() - start_time
                     # start_time = time.time()
                     self.trace_evaluation(output_file, num_correct_predictions, total_predictions, elapsed, len(self.eval_data_lines))
-
+            for alg_name, alg in algorithm_dict.items():
+                print('alg_name: ', alg_name)
+                print('alg.true_positive: ', alg.true_positive)
+                print('alg.false_negative: ', alg.false_negative)
             print('Done testing, epoch reached')
             output_file.write(str(num_correct_predictions / total_predictions) + '\n')
         if self.config.EXPORT_CODE_VECTORS:
@@ -196,15 +202,20 @@ class Model:
         self.eval_data_lines = None
         return num_correct_predictions / total_predictions, precision, recall, f1
 
+
     def write_code_vectors(self, file, code_vectors):
         for vec in code_vectors:
             file.write(' '.join(map(str, vec)) + '\n')
+
 
     def update_per_subtoken_statistics(self, results, true_positive, false_positive, false_negative):
         for original_name, top_words in results:
             prediction = common.filter_impossible_names(top_words)[0]
             original_subtokens = common.get_subtokens(original_name)
             predicted_subtokens = common.get_subtokens(prediction)
+            print('original_subtokens: ', original_subtokens)
+            print('predicted_subtokens: ', predicted_subtokens)
+            print('')
             for subtok in predicted_subtokens:
                 if subtok in original_subtokens:
                     true_positive += 1

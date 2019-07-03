@@ -78,9 +78,6 @@ class PathContextReader:
             target_word_label = self.target_word_table.lookup(word)  # (batch, ) of int
 
         path_source_strings = tf.slice(dense_split_contexts, [0, 0, 0], [-1, self.max_contexts, 1])
-        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$44")
-        print(path_source_strings)
-        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$44")
         path_source_indices = self.word_table.lookup(path_source_strings)  # (batch, max_contexts, 1)
         path_strings = tf.slice(dense_split_contexts, [0, 0, 1], [-1, self.max_contexts, 1])
         path_indices = self.path_table.lookup(path_strings)  # (batch, max_contexts, 1)
