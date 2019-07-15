@@ -3,10 +3,10 @@ import os.path
 from shutil import copyfile
 
 
-def fast_method():
+def fast_method(test_size, validation_size):
     size = len([name for name in os.listdir('../java_files')])
-    test_size = 0.80 * size
-    validation_size = 0.10 * size
+    test_size = test_size * size
+    validation_size = validation_size * size
     src_path = '../dataset/'
     os.makedirs('../dataset/test', exist_ok=True)
     os.makedirs('../dataset/validation', exist_ok=True)
@@ -23,5 +23,3 @@ def fast_method():
             else:
                 copyfile('../java_files/' + str(fname), src_path + 'train/' + str(fname))
 
-
-fast_method()

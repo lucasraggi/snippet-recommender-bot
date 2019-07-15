@@ -1,6 +1,7 @@
 import tensorflow as tf
-from algorithm_evaluate import algorithm
+from algorithm_evaluate import Algorithm
 from algorithm_evaluate import update_algorithm_dict
+from algorithm_evaluate import export_algorithm_dict
 import PathContextReader
 import numpy as np
 import time
@@ -186,10 +187,7 @@ class Model:
                     elapsed = time.time() - start_time
                     # start_time = time.time()
                     self.trace_evaluation(output_file, num_correct_predictions, total_predictions, elapsed, len(self.eval_data_lines))
-            for alg_name, alg in algorithm_dict.items():
-                print('alg_name: ', alg_name)
-                print('alg.true_positive: ', alg.true_positive)
-                print('alg.false_negative: ', alg.false_negative)
+            export_algorithm_dict(algorithm_dict)
             print('Done testing, epoch reached')
             output_file.write(str(num_correct_predictions / total_predictions) + '\n')
         if self.config.EXPORT_CODE_VECTORS:
