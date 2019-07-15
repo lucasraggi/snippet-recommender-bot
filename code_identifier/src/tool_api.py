@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../..')
 from code_identifier.src.code2vec import main
-from util.method_separator_in_python.src.extract_code_information import extractor
+from util.extract_code_information import extractor
 from code_recommender.src.recommender import recommender
 from datetime import datetime
 from werkzeug.serving import run_simple

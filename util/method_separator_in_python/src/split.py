@@ -1,6 +1,6 @@
 from nltk.tokenize import word_tokenize
 from util.method_separator_in_python.src.treat_methods import TreatMethods
-from util.method_separator_in_python.src.extract_code_information import extractor
+from util.extract_code_information import extractor
 from util.method_separator_in_python.src.treat_class import TreatClass
 from util.method_separator_in_python.src.mongodb import MongoDb
 

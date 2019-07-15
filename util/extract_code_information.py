@@ -39,6 +39,7 @@ def get_return_type(code_header, begin):
     return return_type
 
 
+# receives list of lines of the method and extract number_parameters, types_parameters, return_type
 def extractor(method_lines):
     code_header = method_lines[0]
     parameter, begin, end = get_parameters(code_header)  # begin and end of parameters

@@ -1,9 +1,9 @@
 import pandas as pd
 import os
-from util.java_line_remover.src.separate_java_files import fast_method
+from util.separate_java_files import fast_method
 
 
-# transform csv methods into java files for each method
+# transform methods in a csv into a java file for each method
 def main():
     methods_df = pd.read_csv('result.csv')
     directory_path = '../java_files'

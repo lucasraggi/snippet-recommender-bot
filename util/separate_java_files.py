@@ -3,6 +3,7 @@ import os.path
 from shutil import copyfile
 
 
+# re-organizes java files in 3 directories: train, validation, test
 def fast_method(test_size, validation_size):
     size = len([name for name in os.listdir('../java_files')])
     test_size = test_size * size
