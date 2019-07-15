@@ -49,5 +49,6 @@ def export_algorithm_dict(algorithm_dict):
             alg.total = 0
         algorithm_list.append(alg)
     df = pd.DataFrame([x.as_dict() for x in algorithm_list])
+    df = df.sort_values('total', ascending=False)
     df.to_csv('test.csv', index=False)
 
