@@ -5,15 +5,12 @@ from pymongo import MongoClient
 class MongoDb:
     def __init__(self):
         self.client = MongoClient('mongodb://localhost:27017/')
-        self.db = self.client['java_recommender']
+        self.db = self.client['java_code2vec']
         self.collection = self.db['methods']
 
     def __is_correct_to_insert(self, object):
         if object['method_name'] is not None and \
-            object['code'] is not None and \
-            object['num_param'] is not None and \
-            object['param_types'] is not None and \
-            object['return_type'] is not None:
+            object['code'] is not None:
             return True
         return False
 
@@ -32,7 +29,7 @@ class MongoDb:
         except pymongo.errors.OperationFailure as err:
             print("ERROR in query {}".format(err))
 
-    def __delete_all_data(self):
+    def delete_all_data(self):
         self.collection.delete_many({})
 
 

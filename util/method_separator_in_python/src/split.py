@@ -1,8 +1,8 @@
+from mongodb import MongoDb
+from treat_class import TreatClass
 from nltk.tokenize import word_tokenize
-from util.method_separator_in_python.src.treat_methods import TreatMethods
-from util.extract_code_information import extractor
-from util.method_separator_in_python.src.treat_class import TreatClass
-from util.method_separator_in_python.src.mongodb import MongoDb
+from treat_methods import TreatMethods
+
 
 class Split:
     def __init__(self):
@@ -61,15 +61,11 @@ class Split:
 
     def create_new_method_object_and_clear_list(self):
         if len(self.code_lines) > 0:
-            datas = extractor(self.code_lines.copy())
 
             json_method = {
                 'class_name':self.class_name,
                 'method_name':self.method_name,
                 'code':' '.join(map(str, self.code_lines.copy())),
-                'num_param':datas[0],
-                'param_types':datas[1],
-                'return_type':datas[2]
             }
             self.mongodb.insert(json_method)
             self.code_lines.clear()

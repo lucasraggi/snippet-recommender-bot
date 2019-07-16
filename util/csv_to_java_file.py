@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from util.separate_java_files import fast_method
+from util.separate_java_files import separate_train_val_test
 
 
 # transform methods in a csv into a java file for each method
@@ -22,7 +22,7 @@ def main():
         f.write(string_to_file)
         f.close()
         file_count += 1
-    fast_method(0.15, 0.15)
+    separate_train_val_test(0.15, 0.15)
 
 
 main()
