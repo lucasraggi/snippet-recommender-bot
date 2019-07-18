@@ -3,21 +3,16 @@ import pymongo.errors
 from pymongo import MongoClient
 
 class MongoDb:
-    def __init__(self):
+    def __init__(self, collection_name):
         self.client = MongoClient('mongodb://localhost:27017/')
         self.db = self.client['java_code2vec']
-        self.collection = self.db['methods']
+        self.collection = self.db[collection_name]
 
-    def __is_correct_to_insert(self, object):
-        if object['method_name'] is not None and \
-            object['code'] is not None:
-            return True
-        return False
-
-    def insert(self, object):
-        if self.__is_correct_to_insert(object):
-            self.collection.insert_one(object)
-        else:
+    def insert(self, json):
+        try:
+            self.collection.insert_one(json)
+            print(json)
+        except:
             print('ERROR. This Object cannot be insert in collections!')
 
     def find(self):

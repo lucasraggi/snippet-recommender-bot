@@ -4,29 +4,37 @@ from split import Split
 
 
 class TreatDirectory:
-    def __init__(self, directory):
-        self.directory = directory
+    def __init__(self):
+        self.directory = None
+        self.split = None
+        self.collection = None
         self.receive_objects = list()
         self.count = 0
+        self.init = 0
+
+    def setup(self):
+        self.directory = input('Type the directory: ')
+        self.collection = input('Type the collection name: ')
+        self.init = int(input('Type the file number to init: '))
+        self.open_and_working_in_directory()
 
     def open_and_working_in_directory(self):
         if self.check_directory_existing():
-            self.split_java_files_and_add_to_sql(self.directory)
+            self.split_java_files_and_add_database(self.directory)
 
-    def split_java_files_and_add_to_sql(self, directory):
+    def split_java_files_and_add_database(self, directory):
         try:
-            split = Split()
             for file in os.listdir(directory):
                 if os.path.isfile(directory + '/' + file):
                     if self.is_java_file(file):
-                        print(self.count)
-                        print(directory + '/' + file)
+                        split = Split(self.collection)
+                        split.work_in_file(directory + '/' + file)
                         self.count += 1
-                        self.receive_objects = split.work_in_file(directory + '/' + file)
+                        print(self.count)
                 else:
-                    self.split_java_files_and_add_to_sql(directory + '/' + file)
+                    self.split_java_files_and_add_database(directory + '/' + file)
         except:
-            print('ERROR in {}'.format(directory))
+            print('ERROR in {}'.format(directory + '/' + file))
 
     def is_java_file(self, file_name):
         if re.search(".+.java", file_name):
@@ -40,5 +48,4 @@ class TreatDirectory:
         return True
 
 
-path = input('Type the directory: ')
-TreatDirectory(path).open_and_working_in_directory()
+TreatDirectory().setup()

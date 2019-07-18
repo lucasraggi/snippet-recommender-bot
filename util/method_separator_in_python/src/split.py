@@ -5,15 +5,14 @@ from treat_methods import TreatMethods
 
 
 class Split:
-    def __init__(self):
+    def __init__(self, collection_name):
         self.treat_methods = TreatMethods()
         self.code_lines = list()
-        self.all_methods = list()
         self.stack = list()
         self.class_name = None
         self.line = None
         self.method_name = None
-        self.mongodb = MongoDb()
+        self.mongodb = MongoDb(collection_name)
 
     def work_in_file(self, file):
         with open(file, errors='ignore') as f:
@@ -23,7 +22,6 @@ class Split:
                 self.step_management()
                 self.line = f.readline()
             f.close()
-            return self.all_methods
 
     def step_management(self):
         tokens = word_tokenize(self.line)
@@ -41,12 +39,11 @@ class Split:
             self.stack.append('{')
 
     def treat_method(self, tokens):
-        for i in range(0, len(tokens)):
+        if self.treat_methods.is_method_caller(tokens):
+            self.stack.append('{')
             if self.treat_methods.check_if_is_usable_method(tokens, self.class_name):
                 self.method_name = self.treat_methods.define_method_name(tokens)
                 self.code_lines.append(self.line)
-                self.stack.append('{')
-                break
 
     def split_methods(self, tokens):
         for i in range(0, len(tokens)):
@@ -61,15 +58,11 @@ class Split:
 
     def create_new_method_object_and_clear_list(self):
         if len(self.code_lines) > 0:
-
             json_method = {
                 'class_name':self.class_name,
                 'method_name':self.method_name,
                 'code':' '.join(map(str, self.code_lines.copy())),
             }
             self.mongodb.insert(json_method)
-            self.code_lines.clear()
-            self.method_name = None
-            self.class_name = None
-
-
+        self.code_lines.clear()
+        self.method_name = None
