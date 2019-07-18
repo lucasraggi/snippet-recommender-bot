@@ -27,8 +27,9 @@ class TreatDirectory:
             for file in os.listdir(directory):
                 if os.path.isfile(directory + '/' + file):
                     if self.is_java_file(file):
-                        split = Split(self.collection)
-                        split.work_in_file(directory + '/' + file)
+                        if self.count >= self.init:
+                            split = Split(self.collection)
+                            split.work_in_file(directory + '/' + file)
                         self.count += 1
                         print(self.count)
                 else:
