@@ -11,7 +11,7 @@ After installing the dependencies in requirements.txt, to run the api, in the co
 >{"_class": ..., "method": ..., "code": ...}  
 
 where "_class" is the class name and "method" is the method name
-* Returns json in the format: 
+* Returns json in the format:
 >{'method_name': ..., 'method_code': ..., 'method_points': ..., 'num_codes': ...}
 #### Route: /code Type: POST
 * Get string with the incomplete code snippet
