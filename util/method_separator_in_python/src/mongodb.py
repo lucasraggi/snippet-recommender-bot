@@ -1,10 +1,13 @@
 import pymongo
 import pymongo.errors
 from pymongo import MongoClient
+from bson.son import SON
+import pprint
+
 
 class MongoDb:
     def __init__(self, collection_name):
-        self.client = MongoClient('mongodb://localhost:27017/')
+        self.client = MongoClient('localhost', 27017)
         self.db = self.client['java_code2vec']
         self.collection = self.db[collection_name]
 
@@ -26,5 +29,20 @@ class MongoDb:
 
     def delete_all_data(self):
         self.collection.delete_many({})
+
+    def rank_by_occurrence(self):
+        pipeline = [
+            {'$unwind': '$method_name'},
+            {'$group': {'_id': '$method_name', 'count': {'$sum': 1}}},
+            {'$sort': SON([("count", -1), ("_id", -1)])}
+        ]
+        pprint.pprint(list(self.collection.aggregate(pipeline)))
+
+
+
+# data = MongoDb('java3')
+# data.rank_by_occurrence()
+# my_query = { "method_name": {"$regex": "^S"} }
+# pprint.pprint(data.collection.find_one({"method_name": "setUp"}))
 
 
