@@ -39,11 +39,12 @@ class MongoDb:
         pprint.pprint(list(self.collection.aggregate(pipeline)))
 
     def merge_collections(self, collection_name_list, merged_collection_name):
+        new_collection = self.db[merged_collection_name]
         for collection_name in collection_name_list:
             self.db[collection_name].copyTo(merged_collection_name)
 
 
-# data = MongoDb('java3')
+# data = MongoDb('java3')xgd
 # data.rank_by_occurrence()
 # my_query = { "method_name": {"$regex": "^S"} }
 # pprint.pprint(data.collection.find_one({"method_name": "setUp"}))
