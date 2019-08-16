@@ -65,5 +65,3 @@ def main():
     methods = methods.drop('index', axis=1)
     methods.to_csv('../results_variances.csv')
 
-
-main()

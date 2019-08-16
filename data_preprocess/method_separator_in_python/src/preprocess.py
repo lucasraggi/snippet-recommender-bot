@@ -35,3 +35,4 @@ class PreProcess(MongoDb):
 
 
 a = PreProcess('java')
+a.clone_collection('java', 'java_test')

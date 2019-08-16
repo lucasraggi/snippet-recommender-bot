@@ -43,7 +43,13 @@ class MongoDb:
         print(y.deleted_count, " documents deleted.")
         x = self.collection.find(query)
         print(x.count())
-        
+
+    def clone_collection(self, original_collection, destination_collection):
+        pipeline = [{"$match": {}},
+                    {"$out": destination_collection},
+                    ]
+        self.db[original_collection].aggregate(pipeline)
+
 
     def rank_by_occurrence(self):
         pipeline = [
