@@ -11,6 +11,7 @@ class MongoDb:
     def __init__(self, collection_name):
         self.client = MongoClient('localhost', 27017)
         self.db = self.client['java_code2vec']
+        self.collection_name = collection_name
         self.collection = self.db[collection_name]
 
     def insert(self, json):
@@ -42,6 +43,7 @@ class MongoDb:
         print(y.deleted_count, " documents deleted.")
         x = self.collection.find(query)
         print(x.count())
+        
 
     def rank_by_occurrence(self):
         pipeline = [
@@ -49,7 +51,8 @@ class MongoDb:
             {'$group': {'_id': '$method_name', 'count': {'$sum': 1}}},
             {'$sort': SON([("count", -1), ("_id", -1)])}
         ]
-        pprint.pprint(list(self.collection.aggregate(pipeline)))
+        aggregate = self.collection.aggregate(pipeline)
+        pprint.pprint(list(aggregate))
 
     def merge_collections(self, collection_name_list, merged_collection_name):
         new_collection = self.db[merged_collection_name]

@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from util.separate_java_files import separate_train_val_test
+from data_preprocess.separate_java_files import separate_train_val_test
 
 
 # transform methods in a csv into a java file for each method

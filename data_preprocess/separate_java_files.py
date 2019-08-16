@@ -1,4 +1,4 @@
-"""import os
+import os
 import os.path
 from shutil import copyfile
 import shutil
@@ -51,4 +51,3 @@ def separate_to_parallelism(n_division):
 
 
 separate_to_parallelism(8)
-"""
