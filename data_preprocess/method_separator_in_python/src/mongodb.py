@@ -30,6 +30,9 @@ class MongoDb:
         except pymongo.errors.OperationFailure as err:
             print("ERROR in query {}".format(err))
 
+    def delete_collection(self, collection_name):
+        self.db.drop_collection(collection_name)
+
     def delete_all_data(self):
         self.collection.delete_many({})
 
@@ -50,7 +53,6 @@ class MongoDb:
                     ]
         self.db[original_collection].aggregate(pipeline)
 
-
     def rank_by_occurrence(self):
         pipeline = [
             {'$unwind': '$method_name'},
@@ -64,6 +66,15 @@ class MongoDb:
         new_collection = self.db[merged_collection_name]
         for collection_name in collection_name_list:
             self.db.eval('db.' + collection_name + '.copyTo("' + merged_collection_name + '")')
+
+    def sample_collection_to_another(self, n_samples, source_collection, destination_collection):
+        count = 0
+        for document in self.db[source_collection].find():
+            self.db[destination_collection].insert_one(document)
+            if count >= n_samples:
+                break
+            count += 1
+
 
     def export_to_java_files(self):
         count = 0
@@ -88,7 +99,8 @@ class MongoDb:
             #     break
 
 
-data = MongoDb('java')
+data = MongoDb('java_sample')
+data.export_to_java_files()
 # data.merge_collections(['java1', 'java2', 'java3', 'java4', 'java5', 'java6'], 'java')
 # data.rank_by_occurrence()
 # list_to_remove = ['bubbleSort', 'DFS', 'InsertionSort']
