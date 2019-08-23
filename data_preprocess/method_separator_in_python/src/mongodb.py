@@ -8,9 +8,9 @@ import os
 
 
 class MongoDb:
-    def __init__(self, collection_name):
+    def __init__(self, database_name, collection_name):
         self.client = MongoClient('localhost', 27017)
-        self.db = self.client['java_code2vec']
+        self.db = self.client[database_name]
         self.collection_name = collection_name
         self.collection = self.db[collection_name]
 
@@ -75,7 +75,6 @@ class MongoDb:
                 break
             count += 1
 
-
     def export_to_java_files(self):
         count = 0
         directory_path = '../java_files'
@@ -99,7 +98,7 @@ class MongoDb:
             #     break
 
 
-data = MongoDb('java_sample')
+data = MongoDb('code2algo', 'java_sample')
 data.export_to_java_files()
 # data.merge_collections(['java1', 'java2', 'java3', 'java4', 'java5', 'java6'], 'java')
 # data.rank_by_occurrence()
