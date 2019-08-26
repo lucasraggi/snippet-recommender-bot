@@ -3,7 +3,8 @@ import pymongo.errors
 from pymongo import MongoClient
 import re
 import os
-
+import pprint
+import bson
 
 class MongoDb:
     def __init__(self, database_name, collection_name):
@@ -53,14 +54,26 @@ class MongoDb:
 
     def merge_collections(self, collection_name_list, merged_collection_name):
         new_collection = self.db[merged_collection_name]
-        for collection_name in collection_name_list:
-            self.db.eval('db.' + collection_name + '.copyTo("' + merged_collection_name + '")')
+        new_collection.drop()
+        for collection in collection_name_list:
+            self.db[collection].aggregate([{"$merge": merged_collection_name}])
+            print('Collection {} Done'.format(collection))
+            break
 
     def sample_collection_to_another(self, source_collection, destination_collection, n_samples):
         count = 0
         for document in self.db[source_collection].find():
             self.db[destination_collection].insert_one(document)
             if count >= n_samples:
+                break
+            count += 1
+
+    def print_collection(self, collection_name, n=10):
+        count = 0
+        for document in self.db[collection_name].find():
+            print('####################### METHOD:', count, '#######################')
+            print(document['code'])
+            if count >= n:
                 break
             count += 1
 
@@ -88,7 +101,8 @@ class MongoDb:
 
 
 data = MongoDb('code2algo', 'java1')
-# data.merge_collections(['java1', 'java2', 'java3', 'java4', 'java5', 'java6'], 'java')
+# data.sample_collection_to_another('java1', 'java1_sample', 20)
+data.merge_collections(['java1', 'java2', 'java3', 'java4', 'java5', 'java6'], 'java')
 # data.rank_by_occurrence()
 # list_to_remove = ['bubbleSort', 'DFS', 'InsertionSort']
 # alg_list = ['getType', 'toObject']
