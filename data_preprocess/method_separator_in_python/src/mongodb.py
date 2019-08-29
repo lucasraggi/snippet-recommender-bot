@@ -54,9 +54,9 @@ class MongoDb:
 
     def merge_collections(self, collection_name_list, merged_collection_name):
         new_collection = self.db[merged_collection_name]
-        new_collection.drop()
+        self.delete_collection(new_collection)
         for collection in collection_name_list:
-            self.db[collection].aggregate([{"$merge": merged_collection_name}])
+            self.db[collection].aggregate([{"$merge": merged_collection_name}])  # needs mongodb 4.2 or newer
             print('Collection {} Done'.format(collection))
             break
 
@@ -79,12 +79,15 @@ class MongoDb:
 
     def export_to_java_files(self):
         count = 0
-        directory_path = '../java_files'
+        directory_path = '../../../../java_files'
         os.makedirs(directory_path, exist_ok=True)
         os.chdir(directory_path)  # setting working directory to path
         start = 0
         file_count = start
+        size = len(list(self.collection.find()))
         for document in self.collection.find():
+            if count % 1000 == 0:
+                print('##### METHOD {} of {} ##### PERCENTAGE {}'.format(count, size, (count/size * 100)))
             file_name = str(file_count) + '.java'
             f = open(file_name, 'w+')
             method_name = document['method_name']
@@ -95,14 +98,15 @@ class MongoDb:
             f.write(string_to_file)
             f.close()
             file_count += 1
-            # count += 1
+            count += 1
             # if count >= 5:
             #     break
 
 
-data = MongoDb('code2algo', 'java1')
+data = MongoDb('code2algo', 'java_with_removed_methods')
+data.export_to_java_files()
 # data.sample_collection_to_another('java1', 'java1_sample', 20)
-data.merge_collections(['java1', 'java2', 'java3', 'java4', 'java5', 'java6'], 'java')
+#data.merge_collections(['java1', 'java2', 'java3', 'java4', 'java5', 'java6'], 'java')
 # data.rank_by_occurrence()
 # list_to_remove = ['bubbleSort', 'DFS', 'InsertionSort']
 # alg_list = ['getType', 'toObject']

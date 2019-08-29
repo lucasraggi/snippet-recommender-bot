@@ -29,14 +29,16 @@ class PreProcess(MongoDb):
 
     def generate_removed_lines_methods(self, collection_name):
         new_collection = collection_name + '_with_removed_methods'
-        self.db[new_collection].drop()
+        self.delete_collection(new_collection)
         count = 0
-        size = len(self.db[collection_name].find())
+        size = len(list(self.db[collection_name].find()))
         for document in self.db[collection_name].find():
             method = document['code']
             # Getting removable lines
             method_lines = pre_process_method(method)  # Pre processing code (comments, spaces after lines, ...)
-            print('##### METHOD i = {} of {} #####'.format(count, size))
+            if count % 1000 == 0:
+                print('##### METHOD {} of {} ##### PERCENTAGE {}'.format(count, size, (count/size * 100)))
+
 
             # Getting lines that end with ';
             removable_indexes = get_removable_line_indexes(method_lines)
@@ -49,8 +51,8 @@ class PreProcess(MongoDb):
             self.insert_method_by_method_lines(document, method_lines, new_collection)
             for i in valid_lines_to_be_removed:
                 self.generate_incomplete_methods(document, method_lines, i, new_collection)
-            self.print_collection(new_collection)
             count += 1
+        # self.print_collection(new_collection)
 
     def rank_by_occurrence(self):
         pipeline = [
@@ -62,7 +64,9 @@ class PreProcess(MongoDb):
         pprint.pprint(list(aggregate))
 
 
-a = PreProcess('code2algo', 'java1')
-a.merge_collections(['java1', 'java2', 'java3', 'java4', 'java5', 'java6'], 'java')
+a = PreProcess('code2algo', 'java')
+a.rank_by_occurrence()
+# a.clone_collection('java', 'java_backup')
+# a.merge_collections(['java1', 'java2', 'java3', 'java4', 'java5', 'java6'], 'java')
 # a.sample_collection_to_another('java1', 'java1_small', 5)
-# a.generate_removed_lines_methods('java1_small')
+a.generate_removed_lines_methods('java')
